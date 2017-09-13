@@ -1,0 +1,21 @@
+Package: PolarMetrics
+Type: Package
+Title: Functions for analyzing seasonal patterns in environmental variables
+Version: 0.1.0
+Author: Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+Maintainer: Bjorn J. Brooks <bjorn@geobabble.org>
+Depends:
+    R (>= 2.10),
+    zoo
+Suggests:
+    plotrix
+Description: Functions useful for data reduction of environmental
+    variables. Output data quantify the features of each annual (or diel)
+    cycle using a polar coordinate framework. Functions are generalized to work
+    on any time series with cycles of any length (daily, annual, interannual),
+    but were developed for improved interannual analysis of land surface
+    phenology data (NDVI).
+License: GPL (>=2)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
