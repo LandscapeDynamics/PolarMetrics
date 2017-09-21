@@ -1,11 +1,18 @@
 #' @name vec_ang
 #' @title Calculate radial angles from horizontal and vertical component vectors
-#' @description Calculate the radial angle for each horizontal and vertical component vector pair.
-#' @param vx A numeric vector of 1 or more values representing horizontal components of Euclidean vectors. \code{vx} can be obtained using \code{\link{vec.x}}.
-#' @param vy A numeric vector of 1 or more values representing vertical components of Euclidean vectors. \code{vy} can be obtained using \code{\link{vec.y}}.
-#' @details vec_ang returns the angle corresponding to the horizontal (\eqn{vx}) and vertical vector components (\eqn{vy}) according to:
+#' @description Calculate the radial angle for each horizontal and
+#'   vertical component vector pair.
+#' @param vx A numeric vector of 1 or more values representing
+#'   horizontal components of Euclidean vectors. \code{vx} can be obtained
+#'   using \code{\link{vec.x}}.
+#' @param vy A numeric vector of 1 or more values representing vertical
+#'   components of Euclidean vectors. \code{vy} can be obtained using
+#'   \code{\link{vec.y}}.
+#' @details vec_ang returns the angle corresponding to the horizontal
+#'   (\eqn{vx}) and vertical vector components (\eqn{vy}) according to:
 #' \deqn{atan2(vy, vx) + \pi}{atan2(vy, vx) + \pi}
-#' @return Returns the polar coordinate angle corresponding to each horizontal and vertical component vector pair.
+#' @return Returns the polar coordinate angle corresponding to each
+#'   horizontal and vertical component vector pair.
 #' @examples
 #' dpy <- 365                 # Days/yr
 #' data(mndvi)                # Load data

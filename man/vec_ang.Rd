@@ -7,18 +7,25 @@
 vec_ang(vx, vy)
 }
 \arguments{
-\item{vx}{A numeric vector of 1 or more values representing horizontal components of Euclidean vectors. \code{vx} can be obtained using \code{\link{vec.x}}.}
+\item{vx}{A numeric vector of 1 or more values representing
+horizontal components of Euclidean vectors. \code{vx} can be obtained
+using \code{\link{vec.x}}.}
 
-\item{vy}{A numeric vector of 1 or more values representing vertical components of Euclidean vectors. \code{vy} can be obtained using \code{\link{vec.y}}.}
+\item{vy}{A numeric vector of 1 or more values representing vertical
+components of Euclidean vectors. \code{vy} can be obtained using
+\code{\link{vec.y}}.}
 }
 \value{
-Returns the polar coordinate angle corresponding to each horizontal and vertical component vector pair.
+Returns the polar coordinate angle corresponding to each
+  horizontal and vertical component vector pair.
 }
 \description{
-Calculate the radial angle for each horizontal and vertical component vector pair.
+Calculate the radial angle for each horizontal and
+  vertical component vector pair.
 }
 \details{
-vec_ang returns the angle corresponding to the horizontal (\eqn{vx}) and vertical vector components (\eqn{vy}) according to:
+vec_ang returns the angle corresponding to the horizontal
+  (\eqn{vx}) and vertical vector components (\eqn{vy}) according to:
 \deqn{atan2(vy, vx) + \pi}{atan2(vy, vx) + \pi}
 }
 \examples{
@@ -31,11 +38,12 @@ vx <- mean(vec.x(r,v), na.rm=TRUE) # Avg horizontal vector
 vy <- mean(vec.y(r,v), na.rm=TRUE) # Avg vertical vector
 rv_ang <- vec_ang(vx,vy)    # Angle of resultant vec (point of max activity)
 }
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (in composition). Quantifying seasonal patterns in
+  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-\author{
-Danny C. Lee, William W. Hargrove, Bjorn J. Brooks, Lars Y. Pomara
-}
+

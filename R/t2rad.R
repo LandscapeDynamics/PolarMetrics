@@ -2,11 +2,14 @@
 #' @title Transform dates to radians
 #' @description Transform dates to radians.
 #' @param t A vector of numeric dates to be transformed to polar coordinates.
-#' @param dpc A numeric value representing the number of divisions per cycle (e.g., hours per day, days per year, etc.)
-#' @details \code{t2rad} transforms the sequence \eqn{t} of dates to radians using:
+#' @param dpc A numeric value representing the number of divisions per
+#'   cycle (e.g., hours per day, days per year, etc.)
+#' @details \code{t2rad} transforms the sequence \eqn{t} of dates to
+#'   radians using:
 #' \deqn{\frac{(t - 1) \bmod d}{d} * 2\pi}{(t - 1) \% d / d * 2\pi}
 #' where \eqn{d} indicates the number of days per year in sequence \eqn{t}.
-#' @return Returns a vector of polar coordinates the same length as input vector \eqn{t}.
+#' @return Returns a vector of polar coordinates the same length as
+#'   input vector \eqn{t}.
 #' @examples
 #' dpy <- 365                 # Days/year
 #' data(mndvi)                # Load data

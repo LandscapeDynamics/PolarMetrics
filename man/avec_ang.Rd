@@ -30,11 +30,12 @@ vm <- vec_mag(vx,vy)       # Magnitude of average vector
 rv_ang <- vec_ang(vx,vy)   # Angle of resultant vec (point of max activity)
 avec_ang <- avec_ang(rv_ang)  # Angle marking point of least activity
 }
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (in composition). Quantifying seasonal patterns in
+  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-\author{
-Danny C. Lee, William W. Hargrove, Bjorn J. Brooks, Lars Y. Pomara
-}
+

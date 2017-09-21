@@ -1,8 +1,10 @@
 #' @name rad2idx
 #' @title Transform radians to sequential index values
-#' @description Transform radian values to the nearest corresponding indices of the original data.
+#' @description Transform radian values to the nearest corresponding
+#'   indices of the original data.
 #' @param r A vector of numeric values representing dates in radians.
-#' @param spc A numeric value indicating the number of samples per cycle (e.g., samples per year).
+#' @param spc A numeric value indicating the number of samples per cycle
+#'   (e.g., samples per year).
 #' @details rad2idx finds the corresponding indices for each element of \eqn{r}.
 #' @return Returns the index values corresponding to \eqn{r}.
 #' @examples

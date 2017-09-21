@@ -9,16 +9,22 @@ vec.y(r, v)
 \arguments{
 \item{r}{A vector of numeric values representing dates in radians.}
 
-\item{v}{A vector of numeric values representing a uniformly sampled series of data that vary over multiple cycles.}
+\item{v}{A vector of numeric values representing a uniformly sampled
+series of data that vary over multiple cycles.}
 }
 \value{
-Returns the length of the vertical vector component for each polar coordinate pair.
+Returns the length of the vertical vector component for each
+  polar coordinate pair.
 }
 \description{
-Calculate the vertical vector component for each pair of polar coordinates.
+Calculate the vertical vector component for each pair
+  of polar coordinates.
 }
 \details{
-vec.y calculates the length of the vertical vector component of each polar coordinate pair. Given an angle \eqn{r} in radians and a corresponding amplitude \eqn{v} the vertical vector component, \eqn{Vy}, is calculated by:
+vec.y calculates the length of the vertical vector component
+  of each polar coordinate pair. Given an angle \eqn{r} in radians
+  and a corresponding amplitude \eqn{v} the vertical vector component,
+  \eqn{Vy}, is calculated by:
 \deqn{VY(r, v) = v * \sin(r)}{VY(r, v) = v * sin(r)}.
 }
 \examples{
@@ -29,11 +35,12 @@ r <- t2rad(t,dpy)          # Transform days of year to radians
 v <- as.vector(mndvi$wc)   # MODIS NDVI for Willow Creek tower, WI
 vy <- vec.y(r,v)           # The vertical vector components
 }
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (in composition). Quantifying seasonal patterns in
+  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-\author{
-Danny C. Lee, William W. Hargrove, Bjorn J. Brooks, Lars Y. Pomara
-}
+

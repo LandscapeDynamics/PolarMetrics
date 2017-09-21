@@ -7,34 +7,71 @@
 calc_metrics(input, t = NULL, yr_type, spc, lcut, hcut, return.vecs)
 }
 \arguments{
-\item{input}{A vector of values or a column of an xts object indexed with time stamps.}
+\item{input}{Either a vector of values or a column of an xts object
+indexed with time stamps. If \code{input} is an xts object then omit
+argument \code{t}. Else if \code{input} is a vector then a
+corresponding vector of values must be passed to \code{t}.}
 
-\item{t}{An optional vector of time values (e.g., days) corresponding to the input vector sampling points. If \code{input} is an xts object then omit t argument.}
+\item{t}{An optional vector of time values (e.g., days) corresponding
+to the input vector sampling points. Do not use this argument if
+\code{input} is an xts object.}
 
-\item{yr_type}{Argument specifying either 'cal_yr' for output (of timing variables) given in days starting from Jan. 1, or 'offset_yr' for output in days starting from the average seasonal minimum.}
+\item{yr_type}{Argument specifying either 'cal_yr' for output (of
+timing variables) given in days starting from Jan. 1, or 'offset_yr'
+for output in days starting from the average seasonal minimum.}
 
-\item{spc}{Integer value specifying the number of samples per cycle (measurements per year) in input.}
+\item{spc}{Integer value specifying the number of samples per cycle
+(measurements per year) in input.}
 
-\item{lcut}{Numeric value in the range [0,0.5] passed to \code{window_idx} function. Indicates the percentile to truncate from the first half of each cycle. For example, 0.15 will result in remove the interval corresponding to [0\%,15\%] representing a window that begins after the 15th-percentile is crossed.}
+\item{lcut}{Numeric value in the range [0,0.5] passed to
+\code{window_idx} function. Indicates the percentile to truncate
+from the first half of each cycle. For example, 0.15 will result
+in remove the interval corresponding to [0\%,15\%] representing a
+window that begins after the 15th-percentile is crossed.}
 
-\item{hcut}{Numeric value in the range (0.5,1] passed to \code{window_idx} function. Indicates the percentile to truncate from the last half of each cycle. For example, 0.85 will result in remove the interval corresponding to [85\%,100\%] representing a window that begins after the 85th-percentile is crossed.}
+\item{hcut}{Numeric value in the range (0.5,1] passed to
+\code{window_idx} function. Indicates the percentile to truncate
+from the last half of each cycle. For example, 0.85 will result in
+remove the interval corresponding to [85\%,100\%] representing a
+window that begins after the 85th-percentile is crossed.}
 
-\item{return.vecs}{logical argument specifying whether or not to include all of the horizontal and vertical component vectors in output.}
+\item{return.vecs}{logical argument specifying whether or not to
+include all of the horizontal and vertical component vectors in output.}
 }
 \value{
-Returns a list with the derived polar metrics (e.g., length of season). Optional objects in the list are the actual vecturs used in deriving the polar metrics and the average vector angle and magnitude.
+Returns a list with the derived polar metrics (e.g., length of
+  season). Optional objects in the list are the actual vecturs used
+  in deriving the polar metrics and the average vector angle and
+  magnitude.
 }
 \description{
-A basic, but fast function for calculating all polar metrics from XTS arrays.
+A basic, but fast function for calculating all polar
+  metrics from arrays or xts objects.
 }
 \details{
-\code{calc_metrics} runs through the entire polar transformation process and conveniently outputs the final polar metrics for all years included in the input.
+\code{calc_metrics} runs through the entire polar
+  transformation process and conveniently outputs the final polar
+  metrics for all years included in the input.
+}
+\examples{
+library(PolarMetrics)
+library(xts)
+input <- xts(mndvi$fef, as.Date(mndvi$date))
+calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
+             return.vecs=FALSE) # Calculate metrics
+### Return the average vectors for the entire time series 
+calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
+             return.vecs=TRUE)$avg.vectors
+### Return the horizontal and vertical vector components
+head(calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
+             return.vecs=TRUE)$vectors)
+}
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
 }
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (in composition). Quantifying seasonal patterns in
+  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-\author{
-Danny C. Lee, William W. Hargrove, Bjorn J. Brooks, Lars Y. Pomara
-}
+

@@ -1,19 +1,53 @@
 #' @name window_idx
-#' @title Calculate index values marking truncation endpoints for a window within a series of cumulative sums
-#' @description Calculate index values marking the truncation endpoints for a window within a series of cumulative sums. In a phenological context these endpoints define the beginning and end of a quantitatively specified growing season.
-#' @param s A vector of numeric values representing a uniformly sampled series of cumulative sums. \code{s} can be obtained using \code{\link{sum_cycle}}
+#' @title Calculate index values marking truncation endpoints for a
+#'   window within a series of cumulative sums
+#' @description Calculate index values marking the truncation endpoints
+#'   for a window within a series of cumulative sums. In a phenological
+#'   context these endpoints define the beginning and end of a
+#'   quantitatively specified growing season.
+#' @param s A vector of numeric values representing a uniformly
+#'   sampled series of cumulative sums. \code{s} can be obtained using
+#'   \code{\link{sum_cycle}}
 #' @param c A numeric value indicating the number of cycles in series \code{s}.
-#' @param cy A positive integer in the range [0,c] indicating the cycle (year) within which to calculate truncation endpoints.
-#' @param lb A numeric value in the range [0,0.5] indicating the percent of cumulative total to truncate from the first half of cycle number \code{cy}. For example, 0.15 will result in remove the interval corresponding to [0\%,15\%] representing a window that begins after 15\% of cumulative annual total is crossed.
-#' @param ub A numeric value in the range (0.5,1] indicating the percent of cumulative total to truncate from the last half of cycle \code{cy}. For example, 0.8 will result in removing (80\%,100\%] of cumulative NDVI representing a window that begins after the 85\% of cumulative annual total is crossed.
-#' @details \code{window_idx} returns a vector of two values indicating endpoints for a window within series \eqn{S}. Cumulative sums within these endpoints are used to place threshold crossings in the data such as growing season start and end points. Since a growing season can be based on crossing points of cumulative sums. Make \eqn{S} a series of cumulative sums and \eqn{s} a subset of growing season values within \eqn{S}. \eqn{s} can be defined on the basis of thresholds crossings of cumulative sums as follows. For a given threshold value, \eqn{t}, let \eqn{j(t)} be the index \eqn{j} for \eqn{S} such that
-#' \deqn{\{i: t < S_i < (t-1)\}}{{i: t < S_i < (t-1)}}
-#' Then \eqn{\min j(t)}{min[j(t)]} is the index of \eqn{S} marking the first value larger than \eqn{t}, which is also the beginning of the growing season. \eqn{\max j(t)}{max[j(t)]} marks the ending index.
+#' @param cy A positive integer in the range [0,c] indicating the cycle
+#'   (year) within which to calculate truncation endpoints.
+#' @param lb A numeric value in the range [0,0.5] indicating the
+#'   percent of cumulative total to truncate from the first half of
+#'   cycle number \code{cy}. For example, 0.15 will result in remove
+#'   the interval corresponding to [0\%,15\%] representing a window that
+#'   begins after 15\% of cumulative annual total is crossed.
+#' @param ub A numeric value in the range (0.5,1] indicating the percent
+#'   of cumulative total to truncate from the last half of cycle
+#'   \code{cy}. For example, 0.8 will result in removing (80\%,100\%]
+#'   of cumulative NDVI representing a window that begins after the 85\%
+#'   of cumulative annual total is crossed.
+#' @details \code{window_idx} returns a vector of two values indicating
+#'   endpoints for a window within series \eqn{S}. Cumulative sums within
+#'   these endpoints are used to place threshold crossings in the data
+#'   such as growing season start and end points. Since a growing season
+#'   can be based on crossing points of cumulative sums. Make \eqn{S}
+#'   a series of cumulative sums and \eqn{s} a subset of growing season
+#'   values within \eqn{S}. \eqn{s} can be defined on the basis of
+#'   thresholds crossings of cumulative sums as follows. For a given
+#'   threshold value, \eqn{t}, let \eqn{j(t)} be the index \eqn{j}
+#'   for \eqn{S} such that
+#'   \deqn{\{i: t < S_i < (t-1)\}}{{i: t < S_i < (t-1)}}
+#'   Then \eqn{\min j(t)}{min[j(t)]} is the index of \eqn{S} marking the
+#'   first value larger than \eqn{t}, which is also the beginning of the
+#'   growing season. \eqn{\max j(t)}{max[j(t)]} marks the ending index.
 #' \cr\cr
-#' Figure 2. This visualization shows how the subset of values representing the growing season are selected based on a cumulative NDVI threshold percentage of 15\%. The growing season is defined to start after cumulative NDVI reaches 15\% of the total for that phenology-centered year and ends at 85\%.\cr
-#' \if{html}{\figure{ex2.png}{options: alt="Figure: ex2.png"}}
-#' \if{latex}{\figure{ex2.pdf}{options: width=7cm}}
-#' @return Returns a vector of the five indexes (from the input) marking the following timing metrics: early season (lb), early-mid season (midpoint of lb and 50% of cumulative total), middle season (50% of cumulative total), late-mid season (midpoint of 50% of cumulative total and ub), and late season (ub).
+#' Figure 2. This visualization shows how the subset of values
+#'   representing the growing season are selected based on a cumulative
+#'   NDVI threshold percentage of 15\%. The growing season is defined
+#'   to start after cumulative NDVI reaches 15\% of the total for that
+#'   phenology-centered year and ends at 85\%.\cr
+#'   \if{html}{\figure{ex2.png}{options: alt="Figure: ex2.png"}}
+#'   \if{latex}{\figure{ex2.pdf}{options: width=7cm}}
+#' @return Returns a vector of the five indexes (from the input)
+#'   marking the following timing metrics: early season (lb), early-mid
+#'   season (midpoint of lb and 50% of cumulative total), middle season
+#'   (50% of cumulative total), late-mid season (midpoint of 50% of
+#'   cumulative total and ub), and late season (ub).
 #' @examples
 #' dpy <- 365                 # Days/yr
 #' c <- 12                    # Num. of years/cycles
@@ -30,9 +64,9 @@
 #' ann_cum <- sum_cycle(v,av_idx,spc=spy)$cumsum # Accum. vals within each yr
 #' # Find seasonal beg, end index for the 2nd yr using 15th pctile of cum NDVI
 #' cy <- 2                    # The second yr of data (which is 2001 here)
-#' es.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[1] # Index of ann_cum marking ES
-#' ms.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[2] # Index of ann_cum marking MS
-#' ls.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[3] # Index of ann_cum marking LS
+#' es.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[1] # Idx of ann_cum marking ES
+#' ms.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[2] # Idx of ann_cum marking MS
+#' ls.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[3] # Idx of ann_cum marking LS
 #' es <- t[es.idx]          # Early growing season day of pheno yr
 #' ems <- t[es.idx]         # Early-mid growing season day of pheno yr
 #' ms <- t[ms.idx]          # Mid (50th %tile) growing season day
@@ -49,21 +83,24 @@
 window_idx <- function(s,c,cy,lb,ub) {
   if (length(c) == 1 & length(cy) == 1 & length(lb) == 1 & length(ub) == 1 & lb >= 0 & lb <= 0.5 & ub > 0.5 & ub <= 1) {
     spy = length(s) / c # num of samples per cycle
+    if (spy %% 1 != 0) {
+      stop('Length of argument s is not evenly divisible by arg c')
+    }
     idx.s = (spy*(cy-1)+1):(spy*cy) # indices marking this cycle's subset
     if (sum(is.na(s[idx.s]))>0) {
       es=NA; ems=NA; ms=NA; lms=NA; ls=NA
     } else {
       x=s[idx.s] # subset x
       pr.x = x / max(x) # convert to percentages
-      es = idx.s[min(which(pr.x > lb))] # index marking the lower threshold for open range
-      ems = idx.s[min(which(pr.x > ((lb+0.5)/2)))] # index marking the midpoint between es and ms
-      ms = idx.s[min(which(pr.x > 0.5))] # index marking the 50% of cumulative total
-      lms = idx.s[min(which(pr.x > ((ub+0.5)/2)))] # index marking the midpoint between ms and ls
-      ls = idx.s[min(which(pr.x >= ub))] # index marking the upper threshold for open range
+      es = idx.s[min(which(pr.x > lb))] # Lower lower threshold index
+      ems = idx.s[min(which(pr.x > ((lb+0.5)/2)))] # Midpoint of ES, MS index
+      ms = idx.s[min(which(pr.x > 0.5))] # 50% of cumulative total index
+      lms = idx.s[min(which(pr.x > ((ub+0.5)/2)))] # Midpoint of MS, LS index
+      ls = idx.s[min(which(pr.x >= ub))] # Upper threshold index
     }
 
     return(c(es, ems, ms, lms, ls))
   } else {
-    stop('Args lb (ub) should be 0<=lb<=0.5 (0.5<ub<=1)')
+    stop('Arguments lb (ub) should be 0<=lb<=0.5 (0.5<ub<=1)')
   }
 }

@@ -1,11 +1,17 @@
 #' @name vec.x
 #' @title Calculate horizontal component vectors
-#' @description Calculate the horizontal vector component for each pair of polar coordinates.
+#' @description Calculate the horizontal vector component for each pair
+#'   of polar coordinates.
 #' @param r A vector of numeric values representing dates in radians.
-#' @param v A vector of numeric values representing a uniformly sampled series of data that vary over multiple cycles.
-#' @details vec.x calculates the length of the horizontal vector component of each polar coordinate pair. Given an angle \eqn{r} in radians and a corresponding amplitude \eqn{v} the horizontal vector component, \eqn{VX}, is calculated by:
+#' @param v A vector of numeric values representing a uniformly sampled
+#'   series of data that vary over multiple cycles.
+#' @details vec.x calculates the length of the horizontal vector component
+#'   of each polar coordinate pair. Given an angle \eqn{r} in radians and
+#'   a corresponding amplitude \eqn{v} the horizontal vector component,
+#'   \eqn{VX}, is calculated by:
 #' \deqn{VX(r, v) = v * \cos(r)}{VX(r, v) = v * cos(r)}.
-#' @return Returns the length of the horizontal vector component for each polar coordinate pair.
+#' @return Returns the length of the horizontal vector component for
+#'   each polar coordinate pair.
 #' @examples
 #' dpy <- 365                 # Days/yr
 #' data(mndvi)                # Load data

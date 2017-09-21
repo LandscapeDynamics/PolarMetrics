@@ -9,16 +9,19 @@ t2rad(t, dpc)
 \arguments{
 \item{t}{A vector of numeric dates to be transformed to polar coordinates.}
 
-\item{dpc}{A numeric value representing the number of divisions per cycle (e.g., hours per day, days per year, etc.)}
+\item{dpc}{A numeric value representing the number of divisions per
+cycle (e.g., hours per day, days per year, etc.)}
 }
 \value{
-Returns a vector of polar coordinates the same length as input vector \eqn{t}.
+Returns a vector of polar coordinates the same length as
+  input vector \eqn{t}.
 }
 \description{
 Transform dates to radians.
 }
 \details{
-\code{t2rad} transforms the sequence \eqn{t} of dates to radians using:
+\code{t2rad} transforms the sequence \eqn{t} of dates to
+  radians using:
 \deqn{\frac{(t - 1) \bmod d}{d} * 2\pi}{(t - 1) \% d / d * 2\pi}
 where \eqn{d} indicates the number of days per year in sequence \eqn{t}.
 }
@@ -29,11 +32,12 @@ t <- as.vector(mndvi$day)  # Days since January 1, 2000
 r <- t2rad(t, dpc=dpy)     # Transform days of year to radians
 head(cbind(t,r))           # Compare results
 }
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (in composition). Quantifying seasonal patterns in
+  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-\author{
-Danny C. Lee, William W. Hargrove, Bjorn J. Brooks, Lars Y. Pomara
-}
+

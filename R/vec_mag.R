@@ -1,11 +1,19 @@
 #' @name vec_mag
-#' @title Calculate Euclidean magnitudes from horizontal and vertical component vectors
-#' @description Calculate the magnitude (Euclidean distance) for each pair of horizontal and vertical component vectors.
-#' @param vx A numeric vector of 1 or more values representing horizontal components of Euclidean vectors. \code{vx} can be obtained using \code{\link{vec.x}}.
-#' @param vy A numeric vector of 1 or more values representing vertical components of Euclidean vectors. \code{vy} can be obtained using \code{\link{vec.y}}.
-#' @details \code{vec_mag} returns the Euclidean distance of each pair of horizontal and vertical component vectors according to:
+#' @title Calculate Euclidean magnitudes from horizontal and vertical
+#'   component vectors
+#' @description Calculate the magnitude (Euclidean distance) for each
+#'   pair of horizontal and vertical component vectors.
+#' @param vx A numeric vector of 1 or more values representing
+#'   horizontal components of Euclidean vectors. \code{vx} can be obtained
+#'   using \code{\link{vec.x}}.
+#' @param vy A numeric vector of 1 or more values representing vertical
+#'  components of Euclidean vectors. \code{vy} can be obtained using
+#'  \code{\link{vec.y}}.
+#' @details \code{vec_mag} returns the Euclidean distance of each pair
+#'   of horizontal and vertical component vectors according to:
 #' \deqn{\sqrt{vx^2 + vy^2}}{\sqrt{vx^2 + vy^2}}
-#' @return Returns the Euclidean distance corresponding to each horizontal and vertical component vector pair.
+#' @return Returns the Euclidean distance corresponding to each horizontal
+#'   and vertical component vector pair.
 #' @examples
 #' dpy <- 365                 # Days/yr
 #' data(mndvi)                # Load data

@@ -1,10 +1,14 @@
 #' @name rad2d
 #' @title Transform from radians to time units
 #' @description Transform radians to dates in time units (e.g., day of year).
-#' @param r A vector of numeric values of angles in radians (representing times/dates) to be converted back to time units.
-#' @param dpc A numeric value representing the number of divisions per cycle (e.g., hours per day, days per year, etc.)
-#' @details \code{rad2d} transforms input values of \code{r} from radians to dates in the interval [0,dpc+1).
-#' @return Returns a vector of cyclic dates in the interval [0,dpc+1) having the same length as input vector \eqn{r}.
+#' @param r A vector of numeric values of angles in radians (representing
+#'   times/dates) to be converted back to time units.
+#' @param dpc A numeric value representing the number of divisions per
+#'   cycle (e.g., hours per day, days per year, etc.)
+#' @details \code{rad2d} transforms input values of \code{r} from radians
+#'   to dates in the interval [0,dpc+1).
+#' @return Returns a vector of cyclic dates in the interval [0,dpc+1)
+#'   having the same length as input vector \eqn{r}.
 #' @examples
 #' dpy <- 365                 # Days/year
 #' data(mndvi)                # Load data

@@ -63,7 +63,7 @@ sum_cycle <- function(v,b,spc) {
         endidx.cs=spc*I
         cs[begidx.cs:endidx.cs]=
           cumsum(v[begidx.v:endidx.v]) # Cumulative sum
-        idx[begidx.cs:endidx.cs]=begidx.v:endidx.v # Corresponding index in input
+        idx[begidx.cs:endidx.cs]=begidx.v:endidx.v # Corresponding idx in input
       }
     } else { # If natural (phenological) yr is offset
       cs=c(NA,spc*(c-1)) # Initialize cumsum variable with room for c-1 cycles
@@ -81,7 +81,7 @@ sum_cycle <- function(v,b,spc) {
   } else if (b > spc) {
     stop('the value of arg 2 should be <= arg 3. See documentation')
   } else if ((length(v)/spc) <= 1) {
-    stop('arg 1 vector should contain more than 1 cycle (year) of data. See documentation')
+    stop('arg 1 vector should contain > 1 cycle/yr of data. See documentation')
   } else if (length(v) %% spc != 0) {
     stop('arg 1 should be exactly divisible by arg 2. See documentation')
   } else {

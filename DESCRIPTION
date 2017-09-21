@@ -8,14 +8,15 @@ Depends:
     R (>= 2.10),
     zoo
 Suggests:
-    plotrix
+    plotrix,
+    xts
 Description: Functions useful for data reduction of environmental
     variables. Output data quantify the features of each annual (or diel)
     cycle using a polar coordinate framework. Functions are generalized to work
     on any time series with cycles of any length (daily, annual, interannual),
     but were developed for improved interannual analysis of land surface
     phenology data (NDVI).
-License: GPL (>=2)
+License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 5.0.1

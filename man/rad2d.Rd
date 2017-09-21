@@ -7,18 +7,22 @@
 rad2d(r, dpc)
 }
 \arguments{
-\item{r}{A vector of numeric values of angles in radians (representing times/dates) to be converted back to time units.}
+\item{r}{A vector of numeric values of angles in radians (representing
+times/dates) to be converted back to time units.}
 
-\item{dpc}{A numeric value representing the number of divisions per cycle (e.g., hours per day, days per year, etc.)}
+\item{dpc}{A numeric value representing the number of divisions per
+cycle (e.g., hours per day, days per year, etc.)}
 }
 \value{
-Returns a vector of cyclic dates in the interval [0,dpc+1) having the same length as input vector \eqn{r}.
+Returns a vector of cyclic dates in the interval [0,dpc+1)
+  having the same length as input vector \eqn{r}.
 }
 \description{
 Transform radians to dates in time units (e.g., day of year).
 }
 \details{
-\code{rad2d} transforms input values of \code{r} from radians to dates in the interval [0,dpc+1).
+\code{rad2d} transforms input values of \code{r} from radians
+  to dates in the interval [0,dpc+1).
 }
 \examples{
 dpy <- 365                 # Days/year
@@ -28,11 +32,12 @@ r <- t2rad(t, dpc=dpy)     # Transform days of year to radians
 days_from_rads <- rad2d(r, dpc=dpy) # Transform radians back to days of year
 head(cbind(t, days_from_rads)) # Compare results. Cols should be equivalent
 }
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (in composition). Quantifying seasonal patterns in
+  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-\author{
-Danny C. Lee, William W. Hargrove, Bjorn J. Brooks, Lars Y. Pomara
-}
+

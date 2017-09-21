@@ -2,23 +2,31 @@
 % Please edit documentation in R/vec_mag.R
 \name{vec_mag}
 \alias{vec_mag}
-\title{Calculate Euclidean magnitudes from horizontal and vertical component vectors}
+\title{Calculate Euclidean magnitudes from horizontal and vertical
+  component vectors}
 \usage{
 vec_mag(vx, vy)
 }
 \arguments{
-\item{vx}{A numeric vector of 1 or more values representing horizontal components of Euclidean vectors. \code{vx} can be obtained using \code{\link{vec.x}}.}
+\item{vx}{A numeric vector of 1 or more values representing
+horizontal components of Euclidean vectors. \code{vx} can be obtained
+using \code{\link{vec.x}}.}
 
-\item{vy}{A numeric vector of 1 or more values representing vertical components of Euclidean vectors. \code{vy} can be obtained using \code{\link{vec.y}}.}
+\item{vy}{A numeric vector of 1 or more values representing vertical
+components of Euclidean vectors. \code{vy} can be obtained using
+\code{\link{vec.y}}.}
 }
 \value{
-Returns the Euclidean distance corresponding to each horizontal and vertical component vector pair.
+Returns the Euclidean distance corresponding to each horizontal
+  and vertical component vector pair.
 }
 \description{
-Calculate the magnitude (Euclidean distance) for each pair of horizontal and vertical component vectors.
+Calculate the magnitude (Euclidean distance) for each
+  pair of horizontal and vertical component vectors.
 }
 \details{
-\code{vec_mag} returns the Euclidean distance of each pair of horizontal and vertical component vectors according to:
+\code{vec_mag} returns the Euclidean distance of each pair
+  of horizontal and vertical component vectors according to:
 \deqn{\sqrt{vx^2 + vy^2}}{\sqrt{vx^2 + vy^2}}
 }
 \examples{
@@ -31,11 +39,12 @@ vx <- mean(vec.x(r,v), na.rm=TRUE) # Avg horizontal vector
 vy <- mean(vec.y(r,v), na.rm=TRUE) # Avg vertical vector
 vm <- vec_mag(vx,vy)       # Magnitude (length) of average vector
 }
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (in composition). Quantifying seasonal patterns in
+  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-\author{
-Danny C. Lee, William W. Hargrove, Bjorn J. Brooks, Lars Y. Pomara
-}
+

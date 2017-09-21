@@ -9,13 +9,15 @@ rad2idx(r, spc)
 \arguments{
 \item{r}{A vector of numeric values representing dates in radians.}
 
-\item{spc}{A numeric value indicating the number of samples per cycle (e.g., samples per year).}
+\item{spc}{A numeric value indicating the number of samples per cycle
+(e.g., samples per year).}
 }
 \value{
 Returns the index values corresponding to \eqn{r}.
 }
 \description{
-Transform radian values to the nearest corresponding indices of the original data.
+Transform radian values to the nearest corresponding
+  indices of the original data.
 }
 \details{
 rad2idx finds the corresponding indices for each element of \eqn{r}.
@@ -29,11 +31,12 @@ r <- t2rad(t, dpc=dpy)     # Transform days of year to radians
 r_idx <- rad2idx(r, spc=spy) # Indices corresponding to radial angles in r
 head(cbind(t,r,r_idx))     # Compare results
 }
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (in composition). Quantifying seasonal patterns in
+  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-\author{
-Danny C. Lee, William W. Hargrove, Bjorn J. Brooks, Lars Y. Pomara
-}
+
