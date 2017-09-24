@@ -1,0 +1,12 @@
+PolarMetrics is an R package containing functions for analyzing seasonal
+patterns in environmental time series. After downloading PolarMetrics
+from GitHub you will first want to ensure you have the zoo library
+installed. If not then install it from CRAN. It is recommended that you
+install xts, though not required.
+
+install.packages("zoo")
+install.packages("xts")
+# Now install PolarMetrics
+install.packages("path2download/PolarMetrics-master/",
+                 repos=NULL, type="source")
+# Refer to the manual for usefual demos. Then explore and enjoy!
