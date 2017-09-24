@@ -5,15 +5,42 @@
 \keyword{package}
 \title{Functions for analyzing seasonal patterns}
 \description{
-This package can be used on any series of uniformly sampled values containing a periodic cycle (i.e., diel or annually cycling atmospheric temperature, CO2, NDVI, stream flow data). These functions transform input series into polar coordinates, identify the "natural" start/end point of the average cycle, and calculate derived metrics describing the timing and asymmetry of seasons based on user-defined thresholds. Timing metrics can be expressed relative to calendar dates or based on a year that begins at the point of least activity (shortest vectors in polar space). These functions were originally developed for landscape ecology to describe differences in annual vegetation phenology cycles.
+This package can be used on any uniformly sampled environmental time
+series containing a periodic cycle (i.e., temperature, CO2, NDVI,
+stream flow). These functions transform and reproject time series on
+to a polar plane in order to calculate the natural, i.e. data-defined,
+seasonal timing dates, seasonal asymmetry and magnitudes. Timing metrics
+can be expressed relative to calendar dates or based on a "natural" year
+that begins at the point of least activity (shortest vectors). Although
+developed to improve interpretation and analysis for NDVI time series
+these functions work on other types of data that have strong periodicities
+of any length (daily, annual, interannual).
 }
 
 \details{
-\code{PolarMetrics} is a family of primarily trigonometric functions written for extracting annual polar measures from uniformly sampled environmental time series. Although developed to improve interpretation and analysis for NDVI time series these functions work on other types of data that have strong periodicities of any length (daily, annual, interannual).
+\code{PolarMetrics} is a family of primarily trigonometric functions
+written for extracting annual polar measures from uniformly sampled
+environmental time series. These functions ultimately output a set of
+timing and magnitude measures that describe attributes of each year
+(cycle), such as seasonality (deciduousness). These measures are useful
+for subsequent analysis such as clustering and factor analysis where
+specific selections of polar metrics (e.g., length of season, seasonal
+magnitude) are ingested to explore particular features or saesons. The
+\code{window_idx} function excludes user-defined portions of the start and
+end of each cycle, which isolates the primary season of interest. In the
+output, timing metrics can be given relative to the calendar year (days
+1-365 corresponding to Jan. 1-Dec. 31), or the offset year (days 1-365
+starting from the average point of least activity). Although uncommon,
+note that if the natural year and calendar years are syncrhonized the
+polar metrics output will have the same number of years as the input
+data. However, in most cases the natural year in the data is offset and
+thus the output measures will have one less year of data than in the
+input, because the values preceeding the first offset are discarded as
+well as the values in the final year following the last complete year.\cr
 
-These functions ultimately output a set of timing and magnitude measures that describe attributes of each cycle (year), such as seasonal magnitude (i.e., deciduousness). These measures are useful for subsequent analysis such as clustering and factor analysis where spelections of polar metrics be used to further refine an analysis to focus on a particular features (e.g., length of season, seasonal magnitude) or time of year (e.g., summer extremes). The \code{window_idx} function excludes user-defined portions of the start and end of each cycle, which isolates the primary season of interest. In the output timing metrics can be given relative to the calendar year (days 1-365 corresponding to Jan. 1-Dec. 31), or the offset year (days 1-365 starting from the average point of least activity, i.e., point of shortest vectors). Note that if the natural year and calendar years are syncrhonized (i.e., in function \code{sum_cycle} argument \code{b} is 0 or equivalent to argument \code{spc}) then output measures will have the same number of years as the input data. However, in most cases the natural year in the data is offset and thus the output measures will have one less year of data than in the input, because the values preceeding the first offset are discarded as well as the values in the final year following the last complete year.\cr
-
-Table 1. Example output of derived polar metrics for MODIS NDVI from 2000-2010 for a single pixel covering the Coweeta Hydrologic Lab eddy flux tower in North Carolina. (See list of variable definitions below)
+Table 1. Example output of derived polar metrics for MODIS NDVI from
+2000-2010 for a single pixel covering the Coweeta Hydrologic Lab eddy
+flux tower in North Carolina. (See list of variable definitions below)
 \tabular{llllllllllll}{
   Year \tab  ES \tab EMS \tab MS  \tab LMS \tab LS  \tab Sintv \tab Savg \tab Ssd  \tab Smag  \tab EMSma \tab LMSma\cr
   2000 \tab  98 \tab 162 \tab 210 \tab 258 \tab 306 \tab 208 \tab 0.702 \tab 0.126 \tab 0.397 \tab 0.536 \tab 0.699\cr
@@ -30,59 +57,152 @@ Table 1. Example output of derived polar metrics for MODIS NDVI from 2000-2010 f
 }
 
 
-\subsection{Polar graphs}{
-Although at first polar coordinate plots can be difficult to inspect, as compared to conventional time series traces, polar graphs can make several aspects of analysis easier. By wrapping data points radially around the center, deviations from the expected seasonal cycle are easier to notice in polar plots. For example the polar plot in Fig. 1(b) makes it easy to see that most of the interannual decline in NDVI is occurring at a particular time of year (December-April), while growing season NDVI remains quite stable year over year. This results in a thick band in the orbital path but only during the winter months. Subtle shifts in timing also become more obvious. For example the spread in orbital path in Fig. 1(b) is constrained during September indicating little interannual variability at that point in the year. However, during October the path is more variable (broader), indicating that October is less predictable and more likely to differ between years.
+\subsection{Interpreting polar graphs}{
+At first glance polar plots can be difficult to inspect, as compared to
+more familiar time series representations. However, polar graphs have
+several benefits over linear time traces. By wrapping data points radially
+around the center, deviations from the typical timing and progression of
+the seasonal cycle are easier to notice. For example the broad width of
+orbits in the polar plot in Fig. 1(b) indicate that there is significant
+difference among years, but most of this orbital width is constrained
+to December through February revealing that most of this interannual
+change is due to changes in the winter vegetation signature (evergreen
+component of the vegetation). Another visual advantage of polar plots
+is that changes in the timing of the season become more obvious. For
+example, during September the breadth in orbital path in Fig. 1(b) is
+constrained, indicating little interannual variability at that point in
+the year. However, during October the path is broader (more variable),
+revealing that October is the more variable month.
 
 % Example of polar conversion
 \if{html}{\figure{ex1.png}{options: width='653px' alt='Figure: ex1.png'}}
 \if{latex}{\figure{ex1.pdf}{options: width=5in}}
 
-Figure 1. Time series and polar plot comparison. Data are from twelve years of MODIS NDVI measurements for one pixel (aprox. 250 x 250 m resolution) covering the \href{http://flux.aos.wisc.edu/twiki/bin/view/Main/ChEASData}{Willow Creek AmeriFlux tower} in northern Wisconsin. (a) shows a conventional time series trace. (b) shows the same data when graphed in polar coordinates (note 1 less year). \code{RVec} (Resultant Vector, calculated by \code{\link{vec_ang}}) marks the the angle of the average polar vector, which points toward mid-August.  \code{AVec} is its opposite (calculated by \code{\link{avec_ang}}), which is the point of least activity during the average cycle and is also the starting point for the average phenological year. \code{SMag} (calculated by \code{\link{vec_mag}}), shows the magnitude (length of red line) of the average of all vectors. The length of \code{SMag} is small because it is the average displacement of all vectors from the center of the polar graph, half of which have negative radial angles and thus largely offset vectors on the other half. (This figure produced by code in Example 3 below).
+Figure 1. Time series and polar plot comparison. Data
+are from twelve years of MODIS NDVI measurements for
+one pixel (aprox. 250 x 250 m resolution) covering the
+\href{http://flux.aos.wisc.edu/twiki/bin/view/Main/ChEASData}{Willow
+Creek AmeriFlux tower} in northern Wisconsin. (a) shows a
+conventional time series. (b) shows the same data when graphed in
+polar coordinates. \code{RVec} (Resultant Vector, calculated by
+\code{\link{vec_ang}}) marks the angle of the average polar vector,
+which points toward mid-August.  \code{AVec} is its opposite (calculated
+by \code{\link{avec_ang}}), which points at the period of least activity
+during the average cycle and is also the starting point for the average
+phenological year. \code{SMag} (calculated by \code{\link{vec_mag}}),
+shows the degree of seasonality (length of red line). The length of
+\code{SMag} is small because it is the average displacement of all
+vectors from the center of the polar graph, half of which have negative
+angles. (This figure produced by code in Example 3 below).
 }
 
 
-\subsection{Polar metrics}{
-The polar measures (Table 1) calculated by \code{PolarMetrics} functions are variable quantities that measure the timing and asymmetry of each cycle. Consider, for example, an evergreen forest when measured by remotely sensed NDVI. In terms of NDVI greenness, the spacing in time of equally spaced NDVI thresholds will tend to be fairly equal and its degree of seasonality will tend to be small because the NDVI signature of the evergreen trees is more or less constant throughout the year. On the other hand a landscape dominated by deciduous trees, because they have larger differences in greenness between winter and summer, will tend to have a higher degrees of seasonality as well as early and late season timing dates that are skewed closer to the middle of the growing season. To quantify the various features of the polar graph in a numerical way this package calculates a variety of metrics that describe timing asymmetry and amplitude of each season.\cr
+\subsection{Interpreting polar metrics}{
+Polar metrics are annual quantities that measure the timing and asymmetry
+of annual cycles. Consider, for example, an evergreen forest, as measured
+by NDVI. Its timing metrics will be more or less equally spaced and its
+seasonality will be small. On the other hand a landscape dominated by
+deciduous trees, because it has larger differences in greenness between
+winter and summer, will have a higher degree of seasonality as well
+as timing dates that are skewed closer to the middle of the growing
+season. This package calculates metrics that describe timing asymmetry
+and amplitude, which allows changes to be compared across years.\cr
 
 
 \subsection{Calculating timing metrics}{
-Threshold completion measures are calculated within each cycle (year) by starting from the point in the polar year corresponding to the shortest vector lengths (See \code{AVec} Fig. 1(b) and start of phenological year in Fig. 2). Values, in this case NDVI, are accumulated within each year (see \code{sum_cycle}) and each data point is assigned a corresponding cumulative percentage based on its proportional value within that year's total. User defined timing thresholds (e.g., 15\% and 80\%) are then assigned (see \code{window_idx}) as the time (day of year) when the data first crossed a given threshold. In these examples timing metrics are measured in days since the start of the calendar year or alternatively the offset/phenological year. (Phenological year days have the advantage of controlling for latitudinal, elevational, or other geographical bias in phenology timing.) Take for example the early season timing metric (ES) on the phenological year and assuming a 15\% threshold. An \code{ES} value of 65 days means that 65 days passed until at least 15\% of the year's total NDVI accumulated. The \code{window_idx} function is written such that timing metrics can occur on integer value days that were actually sampled, so the 15\% threshold actually corresponds to the first sample day when 15\% or more of the year's cumulative total NDVI was achieved. Fig. 2 provides an illustration of how the threshold completion measures were calculated for one example year.
+Threshold completion measures are calculated within each cycle (year) by
+starting from the point in the polar year corresponding to the shortest
+vector lengths (See \code{AVec} Fig. 1(b) and start of phenological year
+in Fig. 2). Values, in this case NDVI, are accumulated within each year
+(see \code{sum_cycle}) and each data point is assigned a corresponding
+cumulative percentage based on its proportional value within that year's
+total. User defined timing thresholds (e.g., 15\% and 80\%) are then
+assigned (see \code{window_idx}) as the time (day of year) when the data
+first crossed a given threshold. In these examples timing metrics are
+measured in days since the start of the calendar year or alternatively the
+offset/phenological year. (Phenological year days have the advantage of
+controlling for latitudinal, elevational, or other geographical bias in
+phenology timing.) Take for example the early season timing metric (ES)
+on the phenological year and assuming a 15\% threshold. An \code{ES}
+value of 65 days means that 65 days passed until at least 15\% of
+the year's total NDVI accumulated. The \code{window_idx} function is
+written such that timing metrics can occur on integer value days that
+were actually sampled, so the 15\% threshold actually corresponds to
+the first sample day when 15\% or more of the year's cumulative total
+NDVI was achieved. Fig. 2 provides an illustration of how the threshold
+completion measures were calculated for one example year.
 
 % Example of threshold completion milestones
 \if{html}{\figure{ex2.png}{options: width='599px' alt='Figure: ex2.png'}}
 \if{latex}{\figure{ex2.pdf}{options: width=5in}}
 
-Figure 2. Timing metrics. Data correspond to year two (2001) of NDVI at Willow creek. Starting from the day corresponding to the average low point in the seasonal cycle, NDVI is cumulatively summed within the phenological year. The early season metric (ES) marks the first day when at least 15\% of cumulative NDVI was reached (day 107 of calendar year or 65 on phenological year. See example code for \code{\link{window_idx}} function). (This figure produced by code in Example 4 below) \cr
+Figure 2. Timing metrics. Data correspond to year two (2001) of NDVI
+at Willow creek. Starting from the day corresponding to the average
+low point in the seasonal cycle, NDVI is cumulatively summed within the
+phenological year. The early season metric (ES) marks the first day when
+at least 15\% of cumulative NDVI was reached (day 107 of calendar year
+or 65 on phenological year. See example code for \code{\link{window_idx}}
+function). (This figure produced by code in Example 4 below) \cr
 
 
 \describe{
-\item{\code{AVec} (start/end of phenological yr)}{Number of days (offset) between Jan. 1 and the point of least activity (shortest vectors in the polar plot)}
-\item{\code{Early season (ES)}}{Number of days to cross first threshold in cumulative annual NDVI (e.g., 15\%).}
-\item{\code{Early-mid season (EMS)}}{Number of days to cross the midpoint (e.g., 32.5\%) between first threshold (e.g., 15\%) and midpoint (50\%).}
-\item{\code{Mid-season (MS)}}{Number of days required to cross 50\% threshold}
-\item{\code{Mid-late season (LMS)}}{Number of days to cross the midpoint (e.g., 67.5\%) between mid-season (50\%) and midpoint (e.g., 80\%).}
-\item{\code{Late season (LS)}}{Number of days to cross late season threshold (e.g., 80\%)}
-\item{\code{Length of season (LOS)}}{Number of days between early and late season thresholds}
+\item{\code{AVec} (start/end of phenological yr)}{Number of days (offset)
+between Jan. 1 and the point of least activity (shortest vectors in the
+polar plot)}
+\item{\code{Early season (ES)}}{Number of days to cross first threshold
+in cumulative annual NDVI (e.g., 15\%).}
+\item{\code{Early-mid season (EMS)}}{Number of days to cross the midpoint
+(e.g., 32.5\%) between first threshold (e.g., 15\%) and midpoint (50\%).}
+\item{\code{Mid-season (MS)}}{Number of days required to cross 50\%
+threshold}
+\item{\code{Mid-late season (LMS)}}{Number of days to cross the midpoint
+(e.g., 67.5\%) between mid-season (50\%) and midpoint (e.g., 80\%).}
+\item{\code{Late season (LS)}}{Number of days to cross late season
+threshold (e.g., 80\%)}
+\item{\code{Length of season (LOS)}}{Number of days between early and
+late season thresholds}
 }
 }
 
 
 \subsection{Calculating asymmetry and amplitude metrics}{
-These power measures are calculated from the values falling within the \code{ES} and \code{LS} thresholds. If \code{\link{window_idx}} is set to search the entire year (e.g., by setting \code{p1}=0 and \code{p2}=1) then asymmetry and amplitude measures will be based on the entire phenological year of data. The list of these measures is as follows:
+These power measures are calculated from the values falling within the
+\code{ES} and \code{LS} thresholds. If \code{\link{window_idx}} is set to
+search the entire year (e.g., by setting \code{p1}=0 and \code{p2}=1)
+then asymmetry and amplitude measures will be based on the entire
+phenological year of data. The list of these measures is as follows:
 
 \describe{
-\item{\code{Savg}}{The average NDVI value between early and late thresholds (e.g., 15-80\%)}
-\item{\code{Ssd}}{The standard deviation of NDVI values between early and late thresholds}
-\item{\code{Smag} (seasonality/deciduousness)}{The length (in units of input data) of the average vector between ES and LS timing points}
-\item{\code{EMSmag} ("spring" seasonal magnitude)}{The length of the average vector between ES and MS timing points}
-\item{\code{LMSmag} ("fall" seasonal magnitude)}{The length of the average vector between MS and LS timing points}
+\item{\code{Savg}}{The average NDVI value between early and late
+thresholds (e.g., 15-80\%)}
+\item{\code{Ssd}}{The standard deviation of NDVI values between early
+and late thresholds}
+\item{\code{Smag} (seasonality/deciduousness)}{The length (in units of
+input data) of the average vector between ES and LS timing points}
+\item{\code{EMSmag} ("spring" seasonal magnitude)}{The length of the
+average vector between ES and MS timing points}
+\item{\code{LMSmag} ("fall" seasonal magnitude)}{The length of the
+average vector between MS and LS timing points}
 }
 
 % Example of four phenological years plotted separately.
 \if{html}{\figure{ex3.png}{options: width='653px' alt='Figure: ex3.png'}}
 \if{latex}{\figure{ex3.pdf}{options: width=5in}}
 
-Figure 3. Polar plots of timing and asymmetry metrics for four years at Fraser Experimental Forest in Colorado. Each panels indicates annual changes in timing and asymmetry metrics. Note that the angle of \code{SMag} corresponds to the timing of mid season (MS), but the length of \code{SMag}, seaonality, is actually a measure of the degree to which data are massed in the direction of the \code{MS} date. These years in particular represent the early stages of mortality in lodgepole pines at FEF caused by bark beetles. Early season NDVI (April) appeared to start a variable decline in 2001, meanwhile summer NDVI remained fairly constant (perhaps due to compensatory greening from understory vegetation). Note that this area had been under significant drought stress and we do not intend to suggest this as a system for diagnosing specific disturbances, only that this technique is capable of measuring changes caused by environmental shifts. (This figure produced by code in Example 5 below)
+Figure 3. Polar plots of timing and asymmetry metrics for four years
+at Fraser Experimental Forest in Colorado. Each panels indicates
+annual changes in timing and asymmetry metrics. Note that the angle of
+\code{SMag} corresponds to the timing of mid season (MS), but the length
+of \code{SMag}, seaonality, is actually a measure of the degree to which
+data are massed in the direction of the \code{MS} date. These years in
+particular represent the early stages of mortality in lodgepole pines at
+FEF caused by bark beetles. Early season NDVI (April) appeared to start a
+variable decline in 2001, meanwhile summer NDVI remained fairly constant
+(perhaps due to compensatory greening from understory vegetation). Note
+that this area had been under significant drought stress and we do not
+intend to suggest this as a system for diagnosing specific disturbances,
+only that this technique is capable of measuring changes caused by
+environmental shifts. (This figure produced by code in Example 5 below)
 }
 
 }
@@ -95,7 +215,9 @@ Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
 Maintainer: Bjorn J. Brooks <bjorn@geobabble.org>
 }
 \references{
-Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y., Hargrove, W.W. (accepted). Quantifying seasonal patterns in disparate environmental variables using the PolarMetrics R package.
+Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y., Hargrove,
+W.W. (accepted). Quantifying seasonal patterns in disparate environmental
+variables using the PolarMetrics R package.
 }
 
 \examples{
@@ -172,6 +294,7 @@ print(pmets)
 ### Example 3, (see Fig. 1 above) Transform into polar coordinates and compare
 library(PolarMetrics)
 library(plotrix)           # Load plotrix for plotting
+dev.new()
 dpy <- 365                 # Days/year
 c <- 12                    # Num. of years/cycles
 data(mndvi)                # Load data
@@ -230,6 +353,7 @@ print('shifts and centers the data on the phenological year.')
 
 ### Example 4, (see Fig. 2 above) Plot cum. NDVI and specify completion milestones
 library(PolarMetrics)
+dev.new()
 dpy <- 365                 # Days/year
 c <- 12                    # Num. of years/cycles
 spy <- 46                  # Samples/year (or samples/cycle)
@@ -337,6 +461,7 @@ par(tcl = -0.5) # Switch back to outward facing tick marks
 ### Example 5, (see Fig. 3 above) Plot 4 pheno yrs & show phen params of grow.seas.
 library(PolarMetrics)
 library(plotrix)           # Load plotrix for plotting
+dev.new()
 lb <- 0.15                 # Lower cumulative sum threshold for window_idx
 ub <- 0.8                  # Upper cumulative sum threshold for window_idx
 dpy <- 365                 # Days/year
