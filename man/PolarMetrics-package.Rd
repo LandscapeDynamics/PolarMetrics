@@ -8,52 +8,43 @@
 This package can be used on any uniformly sampled environmental time
 series containing a periodic cycle (i.e., temperature, CO2, NDVI,
 stream flow). These functions transform and reproject time series on
-to a polar plane in order to calculate the natural, i.e. data-defined,
-seasonal timing dates, seasonal asymmetry and magnitudes. Timing metrics
-can be expressed relative to calendar dates or based on a "natural" year
-that begins at the point of least activity (shortest vectors). Although
+to a polar plane and calculate various measures of seasonal timing, asymmetry and amplitude.
+Timing metrics
+are expressed either on the day-of-year calendar or as days on an empirically defined calendar.
+Although
 developed to improve interpretation and analysis for NDVI time series
-these functions work on other types of data that have strong periodicities
-of any length (daily, annual, interannual).
+these functions work on other types of environmental data
+subject to daily, annual or interannual cycles.
 }
 
 \details{
 \code{PolarMetrics} is a family of primarily trigonometric functions
-written for extracting annual polar measures from uniformly sampled
-environmental time series. These functions ultimately output a set of
-timing and magnitude measures that describe attributes of each year
-(cycle), such as seasonality (deciduousness). These measures are useful
-for subsequent analysis such as clustering and factor analysis where
-specific selections of polar metrics (e.g., length of season, seasonal
-magnitude) are ingested to explore particular features or saesons. The
-\code{window_idx} function excludes user-defined portions of the start and
-end of each cycle, which isolates the primary season of interest. In the
-output, timing metrics can be given relative to the calendar year (days
-1-365 corresponding to Jan. 1-Dec. 31), or the offset year (days 1-365
+written for extracting polar measures from uniformly sampled
+time series. These functions ultimately output a set of
+timing and magnitude metrics that describe attributes of each year
+(cycle), such as seasonality (deciduousness). The metrics are useful
+for subsequent analysis such as clustering and factor analysis
+and allow the analysis to be tailored to a specific season of interest.
+The
+\code{window_idx} function controls the interval over which measures are calculated.
+Timing metrics can be output in day-of-year calendar
+(1-365 corresponding to Jan. 1-Dec. 31), or the empirical-year of the time series (days 1-365
 starting from the average point of least activity). Although uncommon,
-note that if the natural year and calendar years are syncrhonized the
+note that if the empirical-year and calendar years are synchronized the
 polar metrics output will have the same number of years as the input
-data. However, in most cases the natural year in the data is offset and
+data. However, in most cases the empirical-year in the data is offset and
 thus the output measures will have one less year of data than in the
 input, because the values preceeding the first offset are discarded as
 well as the values in the final year following the last complete year.\cr
 
 Table 1. Example output of derived polar metrics for MODIS NDVI from
-2000-2010 for a single pixel covering the Coweeta Hydrologic Lab eddy
+2000-2002 for a single pixel covering the Coweeta Hydrologic Lab eddy
 flux tower in North Carolina. (See list of variable definitions below)
 \tabular{llllllllllll}{
   Year \tab  ES \tab EMS \tab MS  \tab LMS \tab LS  \tab Sintv \tab Savg \tab Ssd  \tab Smag  \tab EMSma \tab LMSma\cr
   2000 \tab  98 \tab 162 \tab 210 \tab 258 \tab 306 \tab 208 \tab 0.702 \tab 0.126 \tab 0.397 \tab 0.536 \tab 0.699\cr
   2001 \tab  98 \tab 170 \tab 218 \tab 258 \tab 306 \tab 208 \tab 0.704 \tab 0.120 \tab 0.390 \tab 0.522 \tab 0.730\cr
-  2002 \tab 106 \tab 170 \tab 218 \tab 266 \tab 314 \tab 208 \tab 0.726 \tab 0.111 \tab 0.406 \tab 0.571 \tab 0.709\cr
-  2003 \tab 106 \tab 162 \tab 218 \tab 258 \tab 306 \tab 200 \tab 0.750 \tab 0.094 \tab 0.431 \tab 0.601 \tab 0.739\cr
-  2004 \tab 106 \tab 162 \tab 218 \tab 258 \tab 306 \tab 200 \tab 0.727 \tab 0.116 \tab 0.425 \tab 0.572 \tab 0.727\cr
-  2005 \tab 106 \tab 170 \tab 218 \tab 266 \tab 306 \tab 200 \tab 0.727 \tab 0.129 \tab 0.431 \tab 0.562 \tab 0.743\cr
-  2006 \tab 106 \tab 170 \tab 218 \tab 258 \tab 314 \tab 208 \tab 0.733 \tab 0.120 \tab 0.415 \tab 0.580 \tab 0.718\cr
-  2007 \tab  98 \tab 162 \tab 218 \tab 258 \tab 306 \tab 208 \tab 0.719 \tab 0.116 \tab 0.401 \tab 0.552 \tab 0.725\cr
-  2008 \tab 106 \tab 162 \tab 218 \tab 258 \tab 306 \tab 200 \tab 0.699 \tab 0.113 \tab 0.408 \tab 0.549 \tab 0.701\cr
-  2009 \tab 106 \tab 162 \tab 218 \tab 258 \tab 306 \tab 200 \tab 0.723 \tab 0.120 \tab 0.428 \tab 0.577 \tab 0.718\cr
-  2010 \tab 106 \tab 162 \tab 218 \tab 258 \tab 306 \tab 200 \tab 0.722 \tab 0.126 \tab 0.429 \tab 0.578 \tab 0.716
+  2002 \tab 106 \tab 170 \tab 218 \tab 266 \tab 314 \tab 208 \tab 0.726 \tab 0.111 \tab 0.406 \tab 0.571 \tab 0.709
 }
 
 
@@ -193,7 +184,7 @@ Figure 3. Polar plots of timing and asymmetry metrics for four years
 at Fraser Experimental Forest in Colorado. Each panels indicates
 annual changes in timing and asymmetry metrics. Note that the angle of
 \code{SMag} corresponds to the timing of mid season (MS), but the length
-of \code{SMag}, seaonality, is actually a measure of the degree to which
+of \code{SMag}, seasonality, is actually a measure of the degree to which
 data are massed in the direction of the \code{MS} date. These years in
 particular represent the early stages of mortality in lodgepole pines at
 FEF caused by bark beetles. Early season NDVI (April) appeared to start a

@@ -10,13 +10,13 @@ Depends:
 Suggests:
     plotrix,
     xts
-Description: Functions useful for analyzing seasonal patterns in environmental
-    variables, that reduce the multitude of input values to a smaller set of
-    seasonal metrics that quantify the features of each annual (or diel) cycle
-    using a polar coordinate framework. Functions are generalized to work on any
-    time series with cycles of any length (daily, annual, interannual), but were
-    developed for improved interannual analysis of land surface phenology data
-    (NDVI).
+Description: Polar coordinate based functions useful for analyzing seasonal
+    patterns in environmental variables, which reduces the multitude of input values
+    to a smaller set of seasonal metrics (e.g., length of season, seasonality)
+    that quantify the features of each annual (or diel) cycle. Functions are
+    generalized to work on any time series with cycles of any length (daily, annual,
+    interannual), but were developed for improved interannual analysis of land
+    surface phenology data (NDVI).
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true

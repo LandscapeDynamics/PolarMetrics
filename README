@@ -1,12 +1,11 @@
 PolarMetrics is an R package containing functions for analyzing seasonal
-patterns in environmental time series. After downloading PolarMetrics
-from GitHub you will first want to ensure you have the zoo library
-installed. If not then install it from CRAN. It is recommended that you
-install xts, though not required.
+patterns in environmental time series. You will first want to ensure you
+have the devtools package installed.
 
-install.packages("zoo")
-install.packages("xts")
-# Now install PolarMetrics
-install.packages("path2download/PolarMetrics-master/",
-                 repos=NULL, type="source")
+# If you don't have it yet, install 'devtools':
+install.packages('devtools')
+# Now install PolarMetrics ('zoo' will install automatically if not present)
+devtools::install_github('bjornbrooks/PolarMetrics')
+# The 'xts' package is recommended (but not required):
+install.packages('xts')
 # Refer to the manual for usefual demos. Then explore and enjoy!
