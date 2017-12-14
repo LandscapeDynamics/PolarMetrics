@@ -31,12 +31,11 @@ r <- t2rad(t, dpc=dpy)     # Transform days of year to radians
 r_idx <- rad2idx(r, spc=spy) # Indices corresponding to radial angles in r
 head(cbind(t,r,r_idx))     # Compare results
 }
-\author{
-Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
-}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}

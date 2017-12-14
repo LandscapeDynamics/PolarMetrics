@@ -4,7 +4,7 @@
 \alias{calc_metrics}
 \title{Easy function for calculating all polar meatrics.}
 \usage{
-calc_metrics(input, t = NULL, yr_type, spc, lcut, hcut, return.vecs)
+calc_metrics(input, t = NULL, yr_type, spc, lcut, hcut, return_vecs, sin_cos)
 }
 \arguments{
 \item{input}{Either a vector of values or a column of an xts object
@@ -17,7 +17,7 @@ to the input vector sampling points. Do not use this argument if
 \code{input} is an xts object.}
 
 \item{yr_type}{Argument specifying either 'cal_yr' for output (of
-timing variables) given in days starting from Jan. 1, or 'offset_yr'
+timing variables) given in days starting from Jan. 1, or 'rot_yr'
 for output in days starting from the average seasonal minimum.}
 
 \item{spc}{Integer value specifying the number of samples per cycle
@@ -35,14 +35,33 @@ from the last half of each cycle. For example, 0.85 will result in
 remove the interval corresponding to [85\%,100\%] representing a
 window that begins after the 85th-percentile is crossed.}
 
-\item{return.vecs}{logical argument specifying whether or not to
+\item{return_vecs}{logical argument specifying whether or not to
 include all of the horizontal and vertical component vectors in output.}
+
+\item{sin_cos}{logical argument. If TRUE then each timing 
+metric (es, ms, etc.) is returned as its sine and cosine components,
+es is returned as es_sin and es_cos.}
 }
 \value{
-Returns a list with the derived polar metrics (e.g., length of
-  season). Optional objects in the list are the actual vecturs used
-  in deriving the polar metrics and the average vector angle and
-  magnitude.
+Returns a list with all of the derived polar metrics (e.g.,
+  early season, mid season, etc.). Timing variables in output can
+  be returned relative to the standard calendar year or rotated to
+  a relative year using \code{yr_type} argument.
+  Sine and cosine components can also be returned instead of days since
+  start using \code{sin_cos} argument.
+  The optional argument \code{return_vecs} can be used to add
+  the actual vecturs used in deriving the polar metrics to the returned
+  list. This will also return the overall average (all years) statistics
+  of the resultant vector (rv) and its opposite the anti-vector (av).
+  Table below indicates the variable components of each object within
+  the returned list.
+metrics (data frame):     year, es (or es_sin, es_cos),
+                          ems (or ems_sin, ems_cos), ms (or ms_sin, ms_cos),
+                          lms (or lms_sin, lms_cos), ls (or ls_sin, ls_cos),
+                          s_intv, s_avg, s_sd, s_mag, ems_mag, lms_mag
+vectors (data frame):     VX, VY
+avg_vectors (data frame): rv_idx, rv_ang, rv_doy, rv_mag,
+                          avec_idx, avec_ang, avec_doy
 }
 \description{
 A basic, but fast function for calculating all polar
@@ -57,21 +76,24 @@ A basic, but fast function for calculating all polar
 library(PolarMetrics)
 library(xts)
 input <- xts(mndvi$fef, as.Date(mndvi$date))
+### Calculate polar measures relative to calendar year
 calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
-             return.vecs=FALSE) # Calculate metrics
-### Return the average vectors for the entire time series 
+             return_vecs=FALSE, sin_cos=FALSE)
+### Calculate as above and return sine, cosine components of timing metrics
 calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
-             return.vecs=TRUE)$avg.vectors
-### Return the horizontal and vertical vector components
+             return_vecs=FALSE, sin_cos=TRUE)
+### Calculate & return the average vectors for the entire time series 
+calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
+             return_vecs=TRUE, sin_cos=FALSE)$avg_vectors
+### Calculate & return the horizontal and vertical vector components
 head(calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
-             return.vecs=TRUE)$vectors)
-}
-\author{
-Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+             return_vecs=TRUE, sin_cos=FALSE)$vectors)
 }
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}

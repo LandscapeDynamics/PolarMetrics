@@ -32,12 +32,11 @@ t <- as.vector(mndvi$day)  # Days since January 1, 2000
 r <- t2rad(t, dpc=dpy)     # Transform days of year to radians
 head(cbind(t,r))           # Compare results
 }
-\author{
-Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
-}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}

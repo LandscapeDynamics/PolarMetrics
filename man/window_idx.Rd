@@ -93,12 +93,11 @@ ls <- t[ls.idx]          # Late growing season day of pheno yr
 Sintv <- ls-es           # Days in the growing season
 ann_cum[es.idx:ls.idx]   # Show cumulative NDVI vals for growing season
 }
-\author{
-Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
-}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}

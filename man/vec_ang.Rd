@@ -38,12 +38,11 @@ vx <- mean(vec.x(r,v), na.rm=TRUE) # Avg horizontal vector
 vy <- mean(vec.y(r,v), na.rm=TRUE) # Avg vertical vector
 rv_ang <- vec_ang(vx,vy)    # Angle of resultant vec (point of max activity)
 }
-\author{
-Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
-}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}

@@ -224,7 +224,7 @@ ub <- 0.8                  # Cutoff point, as a proportion of 1 (0.5-1), to
 s_p_yr <- 46               # Number of MODIS values per year (8-day NDVI)
 # Calculate polar metrics for one MODIS NDVI pixel within Coweeta Hydrologic Lab
 pmets <- calc_metrics(mndvi$chl, t=mndvi$day, yr_type='cal_yr',
-  spc=s_p_yr, lcut=lb, hcut=ub, return.vecs=FALSE)
+  spc=s_p_yr, lcut=lb, hcut=ub, return_vecs=FALSE, sin_cos=FALSE)
 
 ### Example 2, Long version of Example 1
 library(PolarMetrics)

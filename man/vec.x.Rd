@@ -35,12 +35,11 @@ r <- t2rad(t,dpy)          # Transform days of year to radians
 v <- as.vector(mndvi$wc)   # MODIS NDVI for Willow Creek tower, WI
 vx <- vec.x(r,v)           # The horizontal vector components
 }
-\author{
-Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
-}
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
-
+\author{
+Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
+}
