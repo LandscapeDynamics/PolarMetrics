@@ -1,5 +1,5 @@
 #' @name calc_metrics
-#' @title Easy function for calculating all polar meatrics. 
+#' @title Easy function for calculating all polar meatrics.
 #' @description A basic, but fast function for calculating all polar
 #'   metrics from arrays or xts objects.
 #' @importFrom stats sd
@@ -28,7 +28,7 @@
 #'   window that begins after the 85th-percentile is crossed.
 #' @param return_vecs logical argument specifying whether or not to
 #'   include all of the horizontal and vertical component vectors in output.
-#' @param sin_cos logical argument. If TRUE then each timing 
+#' @param sin_cos logical argument. If TRUE then each timing
 #'   metric (es, ms, etc.) is returned as its sine and cosine components,
 #'   es is returned as es_sin and es_cos.
 #' @details \code{calc_metrics} runs through the entire polar
@@ -46,10 +46,19 @@
 #'   of the resultant vector (rv) and its opposite the anti-vector (av).
 #'   Table below indicates the variable components of each object within
 #'   the returned list.
-#' metrics (data frame):     year, es (or es_sin, es_cos),
-#'                           ems (or ems_sin, ems_cos), ms (or ms_sin, ms_cos),
-#'                           lms (or lms_sin, lms_cos), ls (or ls_sin, ls_cos),
-#'                           s_intv, s_avg, s_sd, s_mag, ems_mag, lms_mag
+#' metrics (data frame):     year,
+#'                           es (or es_sin, es_cos),    # Early ssn DOY
+#'                           ems (or ems_sin, ems_cos), # Early-mid ssn DOY
+#'                           ms (or ms_sin, ms_cos),    # Mid ssn DOY
+#'                           lms (or lms_sin, lms_cos), # Late-mid ssn DOY
+#'                           ls (or ls_sin, ls_cos),    # Late ssn DOY
+#'                           s_intv,                    # Season length(days)
+#'                           s_avg,                     # Avg data val in ssn
+#'                           s_sd,                      # StDev of data dur ssn
+#'                           s_mag,                     # Mag of avg vec in ssn
+#'                           ems_mag,                   # Mag early-mid ssn vec
+#'                           lms_mag,                   # Mag late-mid ssn vec
+#'                           a_avg                      # Avg data val of yr
 #' vectors (data frame):     VX, VY
 #' avg_vectors (data frame): rv_idx, rv_ang, rv_doy, rv_mag,
 #'                           avec_idx, avec_ang, avec_doy
@@ -63,7 +72,7 @@
 #' ### Calculate as above and return sine, cosine components of timing metrics
 #' calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
 #'              return_vecs=FALSE, sin_cos=TRUE)
-#' ### Calculate & return the average vectors for the entire time series 
+#' ### Calculate & return the average vectors for the entire time series
 #' calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
 #'              return_vecs=TRUE, sin_cos=FALSE)$avg_vectors
 #' ### Calculate & return the horizontal and vertical vector components
@@ -110,7 +119,8 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
                          ms=rep(NA,npy), lms=rep(NA,npy), ls=rep(NA,npy),
                          s_intv=rep(NA,npy), s_avg=rep(NA,npy),
                          s_sd=rep(NA,npy), s_mag=rep(NA,npy),
-                         ems_mag=rep(NA,npy), lms_mag=rep(NA,npy))
+                         ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
+                         a_avg=rep(NA,npy))
   } else if (isTRUE(sin_cos)) { # if true
     output <- data.frame(yr=rep(NA,npy),
 			 es_sin=rep(NA,npy), es_cos=rep(NA,npy),
@@ -120,7 +130,8 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
 			 ls_sin=rep(NA,npy), ls_cos=rep(NA,npy),
                          s_intv=rep(NA,npy), s_avg=rep(NA,npy),
                          s_sd=rep(NA,npy), s_mag=rep(NA,npy),
-                         ems_mag=rep(NA,npy), lms_mag=rep(NA,npy))
+                         ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
+			                   a_avg=rep(NA,npy))
   }
 
   for (J in 1:npy) { # Calculate pheno param's for each yr
@@ -131,6 +142,7 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     ms_idx <- wi[3]
     lms_idx <- wi[4]
     ls_idx <- wi[5]
+    be_idx = c((spc*(J-1)+1),(spc*J)) # This cycle's beg/end indices
     es <- t[es_idx]   # Day of yr marking lcut (e.g. 15 %tile) threshold
     ems <- t[ems_idx] # Day of yr marking lcut+50/2 threshold
     ms <- t[ms_idx]   # Day of yr marking 50 %tile threshold
@@ -178,6 +190,7 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     output$s_intv[J] <- ls - es # Days in the growing season
     output$s_avg[J] <- mean(v[es_idx:ls_idx], na.rm=TRUE) # Mean for Seasn.
     output$s_sd[J] <- sd(v[es_idx:ls_idx]) # Standard deviation for Seasn.
+    output$a_avg[J] <- mean(v[be_idx[1]:be_idx[2]], na.rm=TRUE) # Full yr mean
     # Magnitude (length) of average vector
     output$s_mag[J] <- vec_mag(mean(VX[es_idx:ls_idx], na.rm=TRUE),
                               mean(VY[es_idx:ls_idx], na.rm=TRUE))

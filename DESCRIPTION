@@ -20,4 +20,4 @@ Description: Polar coordinate based functions useful for analyzing seasonal
 License: GPL (>=3)
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

@@ -4,7 +4,8 @@
 \alias{calc_metrics}
 \title{Easy function for calculating all polar meatrics.}
 \usage{
-calc_metrics(input, t = NULL, yr_type, spc, lcut, hcut, return_vecs, sin_cos)
+calc_metrics(input, t = NULL, yr_type, spc, lcut, hcut, return_vecs,
+  sin_cos)
 }
 \arguments{
 \item{input}{Either a vector of values or a column of an xts object
@@ -38,7 +39,7 @@ window that begins after the 85th-percentile is crossed.}
 \item{return_vecs}{logical argument specifying whether or not to
 include all of the horizontal and vertical component vectors in output.}
 
-\item{sin_cos}{logical argument. If TRUE then each timing 
+\item{sin_cos}{logical argument. If TRUE then each timing
 metric (es, ms, etc.) is returned as its sine and cosine components,
 es is returned as es_sin and es_cos.}
 }
@@ -55,10 +56,19 @@ Returns a list with all of the derived polar metrics (e.g.,
   of the resultant vector (rv) and its opposite the anti-vector (av).
   Table below indicates the variable components of each object within
   the returned list.
-metrics (data frame):     year, es (or es_sin, es_cos),
-                          ems (or ems_sin, ems_cos), ms (or ms_sin, ms_cos),
-                          lms (or lms_sin, lms_cos), ls (or ls_sin, ls_cos),
-                          s_intv, s_avg, s_sd, s_mag, ems_mag, lms_mag
+metrics (data frame):     year,
+                          es (or es_sin, es_cos),    # Early ssn DOY
+                          ems (or ems_sin, ems_cos), # Early-mid ssn DOY
+                          ms (or ms_sin, ms_cos),    # Mid ssn DOY
+                          lms (or lms_sin, lms_cos), # Late-mid ssn DOY
+                          ls (or ls_sin, ls_cos),    # Late ssn DOY
+                          s_intv,                    # Season length(days)
+                          s_avg,                     # Avg data val in ssn
+                          s_sd,                      # StDev of data dur ssn
+                          s_mag,                     # Mag of avg vec in ssn
+                          ems_mag,                   # Mag early-mid ssn vec
+                          lms_mag,                   # Mag late-mid ssn vec
+                          a_avg                      # Avg data val of yr
 vectors (data frame):     VX, VY
 avg_vectors (data frame): rv_idx, rv_ang, rv_doy, rv_mag,
                           avec_idx, avec_ang, avec_doy
@@ -82,7 +92,7 @@ calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
 ### Calculate as above and return sine, cosine components of timing metrics
 calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
              return_vecs=FALSE, sin_cos=TRUE)
-### Calculate & return the average vectors for the entire time series 
+### Calculate & return the average vectors for the entire time series
 calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
              return_vecs=TRUE, sin_cos=FALSE)$avg_vectors
 ### Calculate & return the horizontal and vertical vector components

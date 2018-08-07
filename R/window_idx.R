@@ -51,7 +51,7 @@
 #' @examples
 #' dpy <- 365                 # Days/yr
 #' c <- 12                    # Num. of years/cycles
-#' spy <- 46                  # Number of samples in one cycle (yr)
+#' spc <- 46                  # Number of samples in one cycle (yr)
 #' data(mndvi)                # Load data
 #' t <- as.vector(mndvi$day)  # Days since January 1, 2000
 #' r <- t2rad(t,dpy)          # Transform days of year to radians
@@ -60,8 +60,8 @@
 #' vy <- mean(vec.y(r,v), na.rm=TRUE) # Avg vertical vector
 #' rv_ang <- vec_ang(vx,vy)   # Angle of resultant vec (point of max activity)
 #' avec_ang <- avec_ang(rv_ang)  # Angle marking point of least activity
-#' av_idx <- rad2idx(avec_ang, spc=spy) # Index (1-spc) marking avg start of yr
-#' ann_cum <- sum_cycle(v,av_idx,spc=spy)$cumsum # Accum. vals within each yr
+#' av_idx <- rad2idx(avec_ang, spc=spc) # Index (1-spc) marking avg start of yr
+#' ann_cum <- sum_cycle(v,av_idx,spc=spc)$cumsum # Accum. vals within each yr
 #' # Find seasonal beg, end index for the 2nd yr using 15th pctile of cum NDVI
 #' cy <- 2                    # The second yr of data (which is 2001 here)
 #' es.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[1] # Idx of ann_cum marking ES
@@ -82,11 +82,11 @@
 
 window_idx <- function(s,c,cy,lb,ub) {
   if (length(c) == 1 & length(cy) == 1 & length(lb) == 1 & length(ub) == 1 & lb >= 0 & lb <= 0.5 & ub > 0.5 & ub <= 1) {
-    spy = length(s) / c # num of samples per cycle
-    if (spy %% 1 != 0) {
+    spc = length(s) / c # num of samples per cycle
+    if (spc %% 1 != 0) {
       stop('Length of argument s is not evenly divisible by arg c')
     }
-    idx.s = (spy*(cy-1)+1):(spy*cy) # indices marking this cycle's subset
+    idx.s = (spc*(cy-1)+1):(spc*cy) # indices marking this cycle's subset
     if (sum(is.na(s[idx.s]))>0) {
       es=NA; ems=NA; ms=NA; lms=NA; ls=NA
     } else {
