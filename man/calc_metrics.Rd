@@ -4,8 +4,7 @@
 \alias{calc_metrics}
 \title{Easy function for calculating all polar meatrics.}
 \usage{
-calc_metrics(input, t = NULL, yr_type, spc, lcut, hcut, return_vecs,
-  sin_cos)
+calc_metrics(input, t = NULL, yr_type, spc, lcut, hcut, return_vecs, sin_cos)
 }
 \arguments{
 \item{input}{Either a vector of values or a column of an xts object

@@ -143,11 +143,11 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     lms_idx <- wi[4]
     ls_idx <- wi[5]
     be_idx = c((spc*(J-1)+1),(spc*J)) # This cycle's beg/end indices
-    es <- t[es_idx]   # Day of yr marking lcut (e.g. 15 %tile) threshold
-    ems <- t[ems_idx] # Day of yr marking lcut+50/2 threshold
-    ms <- t[ms_idx]   # Day of yr marking 50 %tile threshold
-    lms <- t[lms_idx] # Day of yr marking hcut+50/2 threshold
-    ls <- t[ls_idx]   # Day of yr marking hcut threshold
+    es <- t[es_idx]                                   # DOY lcut, 15 %tile
+    ems <- t[ems_idx]                                 # DOY for lcut+50/2
+    ms <- t[ms_idx]                                   # DOY for 50 %tile
+    lms <- t[lms_idx]                                 # DOY for hcut+50/2
+    ls <- t[ls_idx]                                   # DOY for hcut
     if (yr_type == 'cal_yr' & !isTRUE(sin_cos)) {
       # Timing variables relative to the calendar year
       output$es[J] <- round((es + avec_doy) %% dpy)   # DOY for ES milestone
@@ -157,35 +157,35 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
       output$ls[J] <- round((ls + avec_doy) %% dpy)   # DOY for LS milestone
     } else if (yr_type == 'rot_yr' & !isTRUE(sin_cos)) {
       # Timing variables relative to the rotated year
-      output$es[J] <- es %% dpy   # DOY marking ES milestone
-      output$ems[J] <- ems %% dpy # DOY marking EMS milestone
-      output$ms[J] <- ms %% dpy   # DOY marking MS milestone
-      output$lms[J] <- lms %% dpy # DOY marking MLS milestone
-      output$ls[J] <- ls %% dpy   # DOY marking LS milestone
+      output$es[J] <- es %% dpy                       # DOY for ES milestone
+      output$ems[J] <- ems %% dpy                     # DOY for EMS milestone
+      output$ms[J] <- ms %% dpy                       # DOY for MS milestone
+      output$lms[J] <- lms %% dpy                     # DOY for MLS milestone
+      output$ls[J] <- ls %% dpy                       # DOY for LS milestone
     } else if (yr_type == 'cal_yr' & isTRUE(sin_cos)) {
       # Sine, cosine timing variables relative to the calendar year
-      output$es_sin[J] <- sin((es + avec_doy) %% dpy)   # sin(DOY) for ES
-      output$es_cos[J] <- cos((es + avec_doy) %% dpy)   # cos(DOY) for ES
-      output$ems_sin[J] <- sin((ems + avec_doy) %% dpy) # sin(DOY) for EMS
-      output$ems_cos[J] <- cos((ems + avec_doy) %% dpy) # cos(DOY) for EMS
-      output$ms_sin[J] <- sin((ms + avec_doy) %% dpy)   # sin(DOY) for MS
-      output$ms_cos[J] <- cos((ms + avec_doy) %% dpy)   # cos(DOY) for MS
-      output$lms_sin[J] <- sin((lms + avec_doy) %% dpy) # sin(DOY) for LMS
-      output$lms_cos[J] <- cos((lms + avec_doy) %% dpy) # cos(DOY) for LMS
-      output$ls_sin[J] <- sin((ls + avec_doy) %% dpy)   # sin(DOY) for LS
-      output$ls_cos[J] <- cos((ls + avec_doy) %% dpy)   # cos(DOY) for LS
+      output$es_sin[J] <- sin(r[es_idx] + avec_ang)   # sin rad.ang. for ES
+      output$es_cos[J] <- cos(r[es_idx] + avec_ang)   # cos rad.ang. for ES
+      output$ems_sin[J] <- sin(r[ems_idx] + avec_ang) # sin rad.ang. for EMS
+      output$ems_cos[J] <- cos(r[ems_idx] + avec_ang) # cos rad.ang. for EMS
+      output$ms_sin[J] <- sin(r[ms_idx] + avec_ang)   # sin rad.ang. for MS
+      output$ms_cos[J] <- cos(r[ms_idx] + avec_ang)   # cos rad.ang. for MS
+      output$lms_sin[J] <- sin(r[lms_idx] + avec_ang) # sin rad.ang. for LMS
+      output$lms_cos[J] <- cos(r[lms_idx] + avec_ang) # cos rad.ang. for LMS
+      output$ls_sin[J] <- sin(r[ls_idx] + avec_ang)   # sin rad.ang. for LS
+      output$ls_cos[J] <- cos(r[ls_idx] + avec_ang)   # cos rad.ang. for LS
     } else if (yr_type == 'rot_yr' & isTRUE(sin_cos)) {
       # Sine, cosine timing vars relative to the rotated yr
-      output$es_sin[J] <- sin(es %% dpy)   # sin(DOY) for ES
-      output$es_cos[J] <- cos(es %% dpy)   # cos(DOY) for ES
-      output$ems_sin[J] <- sin(ems %% dpy) # sin(DOY) for EMS
-      output$ems_cos[J] <- cos(ems %% dpy) # cos(DOY) for EMS
-      output$ms_sin[J] <- sin(ms %% dpy)   # sin(DOY) for MS
-      output$ms_cos[J] <- cos(ms %% dpy)   # cos(DOY) for MS
-      output$lms_sin[J] <- sin(lms %% dpy) # sin(DOY) for LMS
-      output$lms_cos[J] <- cos(lms %% dpy) # cos(DOY) for LMS
-      output$ls_sin[J] <- sin(ls %% dpy)   # sin(DOY) for LS
-      output$ls_cos[J] <- cos(ls %% dpy)   # cos(DOY) for LS
+      output$es_sin[J] <- sin(r[es_idx])              # sin rad.ang. for ES
+      output$es_cos[J] <- cos(r[es_idx])              # cos rad.ang. for ES
+      output$ems_sin[J] <- sin(r[ems_idx])            # sin rad.ang. for EMS
+      output$ems_cos[J] <- cos(r[ems_idx])            # cos rad.ang. for EMS
+      output$ms_sin[J] <- sin(r[ms_idx])              # sin rad.ang. for MS
+      output$ms_cos[J] <- cos(r[ms_idx])              # cos rad.ang. for MS
+      output$lms_sin[J] <- sin(r[lms_idx])            # sin rad.ang. for LMS
+      output$lms_cos[J] <- cos(r[lms_idx])            # cos rad.ang. for LMS
+      output$ls_sin[J] <- sin(r[ls_idx])              # sin rad.ang. for LS
+      output$ls_cos[J] <- cos(r[ls_idx])              # cos rad.ang. for LS
     }
     output$s_intv[J] <- ls - es # Days in the growing season
     output$s_avg[J] <- mean(v[es_idx:ls_idx], na.rm=TRUE) # Mean for Seasn.
