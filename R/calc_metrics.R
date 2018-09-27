@@ -4,11 +4,10 @@
 #'   metrics from arrays or xts objects.
 #' @importFrom stats sd
 #' @importFrom zoo index
-#' @param input Either a vector/array of values or column(s) of an xts
-#'   object indexed with time stamps. If \code{input} is an xts object
-#'   then omit argument \code{t}. Else if \code{input} is a vector/array
-#'   of values then a corresponding vector of time values must be passed
-#'   to \code{t}.
+#' @param input Either a vector of values or a 1-column xts object
+#'   indexed with time stamps. If \code{input} is an xts object then omit
+#'   argument \code{t}. Else if \code{input} is a vector of values then
+#'   \code{t} should be set to a corresponding vector of time values.
 #' @param t An optional vector of time values (e.g., days) corresponding
 #'   to the input vector sampling points. Do not use this argument if
 #'   \code{input} is an xts object.
