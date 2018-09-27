@@ -10,4 +10,4 @@ install.packages('devtools')
 devtools::install_github('efetac/PolarMetrics')
 # The 'xts' package is recommended (but not required):
 install.packages('xts')
-# Refer to the manual for usefual demos. Then explore and enjoy!
+# Refer to the manual for useful demos. Then explore and enjoy!
