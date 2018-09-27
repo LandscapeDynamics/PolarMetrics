@@ -14,18 +14,17 @@
 #' data(mndvi)                # Load data
 #' t <- as.vector(mndvi$day)  # Days since January 1, 2000
 #' r <- t2rad(t, dpc=dpy)     # Transform days of year to radians
-#' days_from_rads <- rad2d(r, dpc=dpy) # Transform radians back to days of year
-#' head(cbind(t, days_from_rads)) # Compare results. Cols should be equivalent
+#' days_from_rads <- rad2d(r, dpc=dpy) # Transform radians back to days of yr
+#' head(cbind(t, days_from_rads)) # Compare results. Cols should be equiv.
 #' @author Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
 #' @references Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-#'   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+#'   Hargrove, W.W. (2017). Quantifying seasonal patterns in
 #'   disparate environmental variables using the PolarMetrics R package.
 #' @export
 
 rad2d <- function(r, dpc) {
   if (length(dpc) == 1 & length(r) >= length(dpc)) {
-    return(dpc*r/(2*pi))	# Unit transformation of vector
-    # back to original time units
+    return(as.integer(dpc * r / (2 * pi)))         # Transf. units to days
   } else {
     stop('arg 1 should have 1 value and arg 2 >= 1 value')
   }

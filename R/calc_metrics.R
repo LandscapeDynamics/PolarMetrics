@@ -4,10 +4,11 @@
 #'   metrics from arrays or xts objects.
 #' @importFrom stats sd
 #' @importFrom zoo index
-#' @param input Either a vector of values or a column of an xts object
-#'   indexed with time stamps. If \code{input} is an xts object then omit
-#'   argument \code{t}. Else if \code{input} is a vector then a
-#'   corresponding vector of values must be passed to \code{t}.
+#' @param input Either a vector/array of values or column(s) of an xts
+#'   object indexed with time stamps. If \code{input} is an xts object
+#'   then omit argument \code{t}. Else if \code{input} is a vector/array
+#'   of values then a corresponding vector of time values must be passed
+#'   to \code{t}.
 #' @param t An optional vector of time values (e.g., days) corresponding
 #'   to the input vector sampling points. Do not use this argument if
 #'   \code{input} is an xts object.
@@ -59,9 +60,10 @@
 #'                           ems_mag,                   # Mag early-mid ssn vec
 #'                           lms_mag,                   # Mag late-mid ssn vec
 #'                           a_avg                      # Avg data val of yr
-#' vectors (data frame):     VX, VY
-#' avg_vectors (data frame): rv_idx, rv_ang, rv_doy, rv_mag,
-#'                           avec_idx, avec_ang, avec_doy
+#' component_vectors (data frame): VX, VY               # Hrz, vert vec comp.
+#' average_vectors (data frame): rv_idx, rv_ang,        # Resultant vector
+#'                           rv_doy, rv_mag,            #  attributes
+#'                           av_idx, av_ang, av_doy     # Anti-vector attr.
 #' @examples
 #' library(PolarMetrics)
 #' library(xts)
@@ -80,14 +82,14 @@
 #'              return_vecs=TRUE, sin_cos=FALSE)$vectors)
 #' @author Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
 #' @references Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-#'   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+#'   Hargrove, W.W. (2017). Quantifying seasonal patterns in
 #'   disparate environmental variables using the PolarMetrics R package.
 #' @export
 
 calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, sin_cos) {
   dpy <- 365 # Days per year
   if (is.null(t)) { # If no values supplied for t then obtain from xts index
-    t <- as.numeric(format(index(input), '%j')) # Time coordinates
+    t <- as.integer(format(index(input), '%j')) # Time coordinates
   }
   t <- as.vector(t)
   input <- as.vector(input)
@@ -95,27 +97,28 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     stop('input and t should be have the same number of values')
   }
   nyr <- length(input)/spc  # No. of years in input
-  r <- t2rad(t, dpc=dpy)       # Transform days of year to radians
+  r <- t2rad(t, dpc=dpy)    # Transform days of year to radians
   v <- as.vector(input)
   VX <- vec.x(r,v)        # Horizontal vectors
   VY <- vec.y(r,v)        # Vertical vectors
   vx <- mean(VX, na.rm=T) # Avg horizontal vector
   vy <- mean(VY, na.rm=T) # Avg vertical vector
-  rv_ang <- vec_ang(vx,vy) # Angle of resultant vector (point of max activity)
+  rv_ang <- vec_ang(vx,vy) # Angle of resultant vec (point of max activity)
   rv_idx <- rad2idx(rv_ang, spc=spc) # Index (1-spc) marking avg vector
   rv_doy <- rad2d(rv_ang, dpc=dpy) # Day of year equivalent of rv_ang
   rv_mag <- vec_mag(vx,vy) # Magnitude (length) of resultant vector
-  avec_ang <- avec_ang(rv_ang) # Angle marking point of least activity
-  avec_doy <- rad2d(avec_ang, dpc=dpy) # Day of year equivalent of avec_ang
-  avec_idx <- rad2idx(avec_ang, spc=spc) # Index (1-spc) marking avg start of yr
-  ann_cum <- sum_cycle(v,avec_idx,spc=spc)$cumsum # Accum vals within rot. yrs
+  av_ang <- avec_ang(rv_ang) # Angle marking point of least activity
+  av_doy <- rad2d(av_ang, dpc=dpy) # Day of year equivalent of av_ang
+  av_idx <- rad2idx(av_ang, spc=spc) # Idx (1-spc) marking avg start of yr
+  ann_cum <- sum_cycle(v,av_idx,spc=spc)$cumsum # Accum vals within rot. yrs
   npy <- length(ann_cum)/spc # No. of complete years in output
-  # Note, output is re-centered, and accumulates starting from avec_idx
+  # Note, output is re-centered, and accumulates starting from av_idx
   #  (offset of variable yr from calendar yr) and has nyr-1 yrs of data
   #  due to re-centering.
 
   if (!isTRUE(sin_cos)) { # if false
-    output <- data.frame(yr=rep(NA,npy), es=rep(NA,npy), ems=rep(NA,npy),
+    output <- data.frame(yr=rep(NA,npy),
+			 es=rep(NA,npy), ems=rep(NA,npy),
                          ms=rep(NA,npy), lms=rep(NA,npy), ls=rep(NA,npy),
                          s_intv=rep(NA,npy), s_avg=rep(NA,npy),
                          s_sd=rep(NA,npy), s_mag=rep(NA,npy),
@@ -123,20 +126,22 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
                          a_avg=rep(NA,npy))
   } else if (isTRUE(sin_cos)) { # if true
     output <- data.frame(yr=rep(NA,npy),
+			 es=rep(NA,npy), ems=rep(NA,npy),
+                         ms=rep(NA,npy), lms=rep(NA,npy), ls=rep(NA,npy),
+                         s_intv=rep(NA,npy), s_avg=rep(NA,npy),
+                         s_sd=rep(NA,npy), s_mag=rep(NA,npy),
+                         ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
+			 a_avg=rep(NA,npy),
 			 es_sin=rep(NA,npy), es_cos=rep(NA,npy),
 			 ems_sin=rep(NA,npy), ems_cos=rep(NA,npy),
 			 ms_sin=rep(NA,npy), ms_cos=rep(NA,npy),
 			 lms_sin=rep(NA,npy), lms_cos=rep(NA,npy),
-			 ls_sin=rep(NA,npy), ls_cos=rep(NA,npy),
-                         s_intv=rep(NA,npy), s_avg=rep(NA,npy),
-                         s_sd=rep(NA,npy), s_mag=rep(NA,npy),
-                         ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
-			                   a_avg=rep(NA,npy))
+			 ls_sin=rep(NA,npy), ls_cos=rep(NA,npy))
   }
 
   for (J in 1:npy) { # Calculate pheno param's for each yr
     output$yr[J] <- J
-    wi <- window_idx(ann_cum,npy,J,lcut,hcut) # early, mid, late-S ann_cum indx
+    wi <- window_idx(ann_cum,npy,J,lcut,hcut) # early, mid, late-S ann_cum idx
     es_idx <- wi[1]
     ems_idx <- wi[2]
     ms_idx <- wi[3]
@@ -148,44 +153,51 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     ms <- t[ms_idx]                                   # DOY for 50 %tile
     lms <- t[lms_idx]                                 # DOY for hcut+50/2
     ls <- t[ls_idx]                                   # DOY for hcut
-    if (yr_type == 'cal_yr' & !isTRUE(sin_cos)) {
+    if (yr_type == 'cal_yr') {
       # Timing variables relative to the calendar year
-      output$es[J] <- round((es + avec_doy) %% dpy)   # DOY for ES milestone
-      output$ems[J] <- round((ems + avec_doy) %% dpy) # DOY for EMS milestone
-      output$ms[J] <- round((ms + avec_doy) %% dpy)   # DOY for MS milestone
-      output$lms[J] <- round((lms + avec_doy) %% dpy) # DOY for MLS milestone
-      output$ls[J] <- round((ls + avec_doy) %% dpy)   # DOY for LS milestone
-    } else if (yr_type == 'rot_yr' & !isTRUE(sin_cos)) {
+      output$es[J] <- as.integer(ceiling((es +        # DOY for ES milestone
+					  av_doy) %% dpy))
+      output$ems[J] <- as.integer(ceiling((ems +      # DOY for EMS milestone
+					   av_doy) %% dpy))
+      output$ms[J] <- as.integer(ceiling((ms +        # DOY for MS milestone
+					  av_doy) %% dpy))
+      output$lms[J] <- as.integer(ceiling((lms +      # DOY for MLS milestone
+					   av_doy) %% dpy))
+      output$ls[J] <- as.integer(ceiling((ls +        # DOY for LS milestone
+					  av_doy) %% dpy))
+      if (isTRUE(sin_cos)) {
+        # Sine, cosine timing variables relative to the calendar year
+        output$es_sin[J] <- sin(r[es_idx] + av_ang)   # sin rad.ang. for ES
+        output$es_cos[J] <- cos(r[es_idx] + av_ang)   # cos rad.ang. for ES
+        output$ems_sin[J] <- sin(r[ems_idx] + av_ang) # sin rad.ang. for EMS
+        output$ems_cos[J] <- cos(r[ems_idx] + av_ang) # cos rad.ang. for EMS
+        output$ms_sin[J] <- sin(r[ms_idx] + av_ang)   # sin rad.ang. for MS
+        output$ms_cos[J] <- cos(r[ms_idx] + av_ang)   # cos rad.ang. for MS
+        output$lms_sin[J] <- sin(r[lms_idx] + av_ang) # sin rad.ang. for LMS
+        output$lms_cos[J] <- cos(r[lms_idx] + av_ang) # cos rad.ang. for LMS
+        output$ls_sin[J] <- sin(r[ls_idx] + av_ang)   # sin rad.ang. for LS
+        output$ls_cos[J] <- cos(r[ls_idx] + av_ang)   # cos rad.ang. for LS
+      }
+    } else if (yr_type == 'rot_yr') {
       # Timing variables relative to the rotated year
       output$es[J] <- es %% dpy                       # DOY for ES milestone
       output$ems[J] <- ems %% dpy                     # DOY for EMS milestone
       output$ms[J] <- ms %% dpy                       # DOY for MS milestone
       output$lms[J] <- lms %% dpy                     # DOY for MLS milestone
       output$ls[J] <- ls %% dpy                       # DOY for LS milestone
-    } else if (yr_type == 'cal_yr' & isTRUE(sin_cos)) {
-      # Sine, cosine timing variables relative to the calendar year
-      output$es_sin[J] <- sin(r[es_idx] + avec_ang)   # sin rad.ang. for ES
-      output$es_cos[J] <- cos(r[es_idx] + avec_ang)   # cos rad.ang. for ES
-      output$ems_sin[J] <- sin(r[ems_idx] + avec_ang) # sin rad.ang. for EMS
-      output$ems_cos[J] <- cos(r[ems_idx] + avec_ang) # cos rad.ang. for EMS
-      output$ms_sin[J] <- sin(r[ms_idx] + avec_ang)   # sin rad.ang. for MS
-      output$ms_cos[J] <- cos(r[ms_idx] + avec_ang)   # cos rad.ang. for MS
-      output$lms_sin[J] <- sin(r[lms_idx] + avec_ang) # sin rad.ang. for LMS
-      output$lms_cos[J] <- cos(r[lms_idx] + avec_ang) # cos rad.ang. for LMS
-      output$ls_sin[J] <- sin(r[ls_idx] + avec_ang)   # sin rad.ang. for LS
-      output$ls_cos[J] <- cos(r[ls_idx] + avec_ang)   # cos rad.ang. for LS
-    } else if (yr_type == 'rot_yr' & isTRUE(sin_cos)) {
-      # Sine, cosine timing vars relative to the rotated yr
-      output$es_sin[J] <- sin(r[es_idx])              # sin rad.ang. for ES
-      output$es_cos[J] <- cos(r[es_idx])              # cos rad.ang. for ES
-      output$ems_sin[J] <- sin(r[ems_idx])            # sin rad.ang. for EMS
-      output$ems_cos[J] <- cos(r[ems_idx])            # cos rad.ang. for EMS
-      output$ms_sin[J] <- sin(r[ms_idx])              # sin rad.ang. for MS
-      output$ms_cos[J] <- cos(r[ms_idx])              # cos rad.ang. for MS
-      output$lms_sin[J] <- sin(r[lms_idx])            # sin rad.ang. for LMS
-      output$lms_cos[J] <- cos(r[lms_idx])            # cos rad.ang. for LMS
-      output$ls_sin[J] <- sin(r[ls_idx])              # sin rad.ang. for LS
-      output$ls_cos[J] <- cos(r[ls_idx])              # cos rad.ang. for LS
+      if (isTRUE(sin_cos)) {
+        # Sine, cosine timing vars relative to the rotated yr
+        output$es_sin[J] <- sin(r[es_idx])            # sin rad.ang. for ES
+        output$es_cos[J] <- cos(r[es_idx])            # cos rad.ang. for ES
+        output$ems_sin[J] <- sin(r[ems_idx])          # sin rad.ang. for EMS
+        output$ems_cos[J] <- cos(r[ems_idx])          # cos rad.ang. for EMS
+        output$ms_sin[J] <- sin(r[ms_idx])            # sin rad.ang. for MS
+        output$ms_cos[J] <- cos(r[ms_idx])            # cos rad.ang. for MS
+        output$lms_sin[J] <- sin(r[lms_idx])          # sin rad.ang. for LMS
+        output$lms_cos[J] <- cos(r[lms_idx])          # cos rad.ang. for LMS
+        output$ls_sin[J] <- sin(r[ls_idx])            # sin rad.ang. for LS
+        output$ls_cos[J] <- cos(r[ls_idx])            # cos rad.ang. for LS
+      }
     }
     output$s_intv[J] <- ls - es # Days in the growing season
     output$s_avg[J] <- mean(v[es_idx:ls_idx], na.rm=TRUE) # Mean for Seasn.
@@ -208,11 +220,12 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     return(output)
   }  else if (isTRUE(return_vecs)) { # if true
     # If vector components requested then return by combining as list object
-    output <- list('metrics' = output, 'vectors' = data.frame(VX=VX, VY=VY),
-                   'avg_vectors' = data.frame(rv_idx=rv_idx, rv_ang=rv_ang,
-                                   rv_doy=rv_doy, rv_mag=rv_mag,
-                                   avec_idx=avec_idx, avec_ang=avec_ang,
-                                   avec_doy=avec_doy))
+    output <- list('metrics' <- output,
+		   'component_vectors' <- data.frame(VX=VX, VY=VY),
+                   'average_vectors' <- data.frame(rv_idx=rv_idx,
+				   rv_ang=rv_ang, rv_doy=rv_doy,
+				   rv_mag=rv_mag, av_idx=av_idx,
+				   av_ang=av_ang, av_doy=av_doy))
     return(output)
   }
 }

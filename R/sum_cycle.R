@@ -41,41 +41,39 @@
 #' vy <- mean(vec.y(r,v), na.rm=TRUE) # Avg vertical vector
 #' rv_ang <- vec_ang(vx,vy)  # Angle of the resultant vector (the direction
 #'   # that the average vector points)
-#' avec_ang <- avec_ang(rv_ang)  # Angle marking point of least activity
-#' av_idx <- rad2idx(avec_ang, spc=spy) # Index (1-spc) marking avg start of yr
+#' av_ang <- avec_ang(rv_ang)  # Angle marking point of least activity
+#' av_idx <- rad2idx(av_ang, spc=spy) # Index (1-spc) marking avg start of yr
 #' ann_cum <- sum_cycle(v,av_idx,spc=spy)$cumsum # Accum. vals within each yr
 #' @author Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
 #' @references Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-#'   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+#'   Hargrove, W.W. (2017). Quantifying seasonal patterns in
 #'   disparate environmental variables using the PolarMetrics R package.
 #' @export
 
 sum_cycle <- function(v,b,spc) {
   if (b <= spc & length(spc) == 1 & length(v) %% spc == 0 & length(v) > length(spc) & (length(v)/spc) > 1) {
-    c=length(v)/spc				   # Num. of cycles
+    c <- length(v)/spc				   # Num. of cycles
     if (b %% spc == 0) { # Special case if natural (phenological) yr not offset
-      cs=c(NA,spc*c) # Initialize cumsum variable with room for c cycles
-      idx=c(NA,spc*c) # Initialize index variable with room for c cycles
+      cs <- c(NA,spc*c)                            # Initialize
+      idx <- c(NA,spc*c)                           # Initialize
       for (I in 1:c) {
-        begidx.v=1+(spc*(I-1)) # Beginning index
-        endidx.v=spc*I	 # Ending index
-        begidx.cs=1+(spc*(I-1))
-        endidx.cs=spc*I
-        cs[begidx.cs:endidx.cs]=
-          cumsum(v[begidx.v:endidx.v]) # Cumulative sum
-        idx[begidx.cs:endidx.cs]=begidx.v:endidx.v # Corresponding idx in input
+        begidx.v <- 1+(spc*(I-1))                  # Beginning index
+        endidx.v <- spc*I	                   # Ending index
+        begidx.cs <- 1+(spc*(I-1))
+        endidx.cs <- spc*I
+        cs[begidx.cs:endidx.cs] <- cumsum(v[begidx.v:endidx.v]) # Cum sum
+        idx[begidx.cs:endidx.cs] <- begidx.v:endidx.v # Corresp. idx in input
       }
     } else { # If natural (phenological) yr is offset
-      cs=c(NA,spc*(c-1)) # Initialize cumsum variable with room for c-1 cycles
-      idx=c(NA,spc*(c-1)) # Initialize index variable with room for c-1 cycles
+      cs <- c(NA,spc*(c-1)) # Initialize cumsum variable with room for c-1 cycles
+      idx <- c(NA,spc*(c-1)) # Initialize index variable with room for c-1 cycles
       for (I in 1:(c-1)) {
-        begidx.v=b+(spc*(I-1)) # Beginning index
-        endidx.v=b+(spc*I)-1	 # Ending index
-        begidx.cs=1+(spc*(I-1))
-        endidx.cs=spc*I
-        cs[begidx.cs:endidx.cs]=
-          cumsum(v[begidx.v:endidx.v]) # Cumulative sum
-        idx[begidx.cs:endidx.cs]=begidx.v:endidx.v # Corresponding index in input
+        begidx.v <- b+(spc*(I-1))                  # Beginning index
+        endidx.v <- b+(spc*I)-1	                   # Ending index
+        begidx.cs <- 1+(spc*(I-1))
+        endidx.cs <- spc*I
+        cs[begidx.cs:endidx.cs] <- cumsum(v[begidx.v:endidx.v]) # Cum sum
+        idx[begidx.cs:endidx.cs] <- begidx.v:endidx.v # Corresp. idx in input
       }
     }
   } else if (b > spc) {
@@ -87,7 +85,7 @@ sum_cycle <- function(v,b,spc) {
   } else {
     stop('arg 1 should have >= 1 value & args 2,3 should have 1 value each')
   }
-  output=data.frame(vidx=idx,cumsum=cs)
+  output <- data.frame(vidx=idx, cumsum=cs)
 
   return(output)
 }

@@ -59,8 +59,8 @@
 #' vx <- mean(vec.x(r,v), na.rm=TRUE) # Avg horizontal vector
 #' vy <- mean(vec.y(r,v), na.rm=TRUE) # Avg vertical vector
 #' rv_ang <- vec_ang(vx,vy)   # Angle of resultant vec (point of max activity)
-#' avec_ang <- avec_ang(rv_ang)  # Angle marking point of least activity
-#' av_idx <- rad2idx(avec_ang, spc=spc) # Index (1-spc) marking avg start of yr
+#' av_ang <- avec_ang(rv_ang)  # Angle marking point of least activity
+#' av_idx <- rad2idx(av_ang, spc=spc) # Index (1-spc) marking avg start of yr
 #' ann_cum <- sum_cycle(v,av_idx,spc=spc)$cumsum # Accum. vals within each yr
 #' # Find seasonal beg, end index for the 2nd yr using 15th pctile of cum NDVI
 #' cy <- 2                    # The second yr of data (which is 2001 here)
@@ -76,7 +76,7 @@
 #' ann_cum[es.idx:ls.idx]   # Show cumulative NDVI vals for growing season
 #' @author Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
 #' @references Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-#'   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+#'   Hargrove, W.W. (2017). Quantifying seasonal patterns in
 #'   disparate environmental variables using the PolarMetrics R package.
 #' @export
 
@@ -86,17 +86,17 @@ window_idx <- function(s,c,cy,lb,ub) {
     if (spc %% 1 != 0) {
       stop('Length of argument s is not evenly divisible by arg c')
     }
-    idx.s = (spc*(cy-1)+1):(spc*cy) # indices marking this cycle's subset
+    idx.s <- (spc*(cy-1)+1):(spc*cy)               # Idx for this cycle's sbst
     if (sum(is.na(s[idx.s]))>0) {
-      es=NA; ems=NA; ms=NA; lms=NA; ls=NA
+      es <- NA; ems <- NA; ms <- NA; lms <- NA; ls <- NA
     } else {
-      x=s[idx.s] # subset x
-      pr.x = x / max(x) # convert to percentages
-      es = idx.s[min(which(pr.x > lb))] # Lower lower threshold index
-      ems = idx.s[min(which(pr.x > ((lb+0.5)/2)))] # Midpoint of ES, MS index
-      ms = idx.s[min(which(pr.x > 0.5))] # 50% of cumulative total index
-      lms = idx.s[min(which(pr.x > ((ub+0.5)/2)))] # Midpoint of MS, LS index
-      ls = idx.s[min(which(pr.x >= ub))] # Upper threshold index
+      x <- s[idx.s]                                # Subset x
+      pr.x <- x / max(x)                           # Convert to percentages
+      es <- idx.s[min(which(pr.x > lb))]           # Lower threshold index
+      ems <- idx.s[min(which(pr.x > ((lb+0.5)/2)))] # Midpoint of ES, MS index
+      ms <- idx.s[min(which(pr.x > 0.5))]          # 50% of cum. total index
+      lms <- idx.s[min(which(pr.x > ((ub+0.5)/2)))] # Midpoint of MS, LS index
+      ls <- idx.s[min(which(pr.x >= ub))]          # Upper threshold index
     }
 
     return(c(es, ems, ms, lms, ls))

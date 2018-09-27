@@ -21,15 +21,15 @@
 #' vy <- vec.y(r,v)           # The vertical vector components
 #' @author Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
 #' @references Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-#'   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+#'   Hargrove, W.W. (2017). Quantifying seasonal patterns in
 #'   disparate environmental variables using the PolarMetrics R package.
 #' @export
 
 vec.y <- function(r,v) {
-  r=as.numeric(r) # In case necessary convert to a numeric vector
-  v=as.numeric(v)
+  r <- as.numeric(r)                               # Ensure type is numeric
+  v <- as.numeric(v)
   if (length(r) == length(v)) {
-    return(v*sin(r)) # vertical vector components of r,n
+    return(v * sin(r))                             # Vert vec comp. of r,v
   } else {
     stop('Number of values in arg 1 should = arg 2')
   }

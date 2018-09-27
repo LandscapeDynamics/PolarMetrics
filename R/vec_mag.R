@@ -25,13 +25,13 @@
 #' vm <- vec_mag(vx,vy)       # Magnitude (length) of average vector
 #' @author Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
 #' @references Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-#'   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+#'   Hargrove, W.W. (2017). Quantifying seasonal patterns in
 #'   disparate environmental variables using the PolarMetrics R package.
 #' @export
 
 vec_mag <- function(vx,vy) {
   if (length(vx) == length(vy)) {
-    return(sqrt(vx^2+vy^2))	# Length of vector
+    return(sqrt(vx^2 + vy^2))                      # Length of vector
   } else {
     stop('Number of values in arg 1 should = arg 2')
   }

@@ -29,12 +29,12 @@ dpy <- 365                 # Days/year
 data(mndvi)                # Load data
 t <- as.vector(mndvi$day)  # Days since January 1, 2000
 r <- t2rad(t, dpc=dpy)     # Transform days of year to radians
-days_from_rads <- rad2d(r, dpc=dpy) # Transform radians back to days of year
-head(cbind(t, days_from_rads)) # Compare results. Cols should be equivalent
+days_from_rads <- rad2d(r, dpc=dpy) # Transform radians back to days of yr
+head(cbind(t, days_from_rads)) # Compare results. Cols should be equiv.
 }
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+  Hargrove, W.W. (2017). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
 \author{

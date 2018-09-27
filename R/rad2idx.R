@@ -17,15 +17,15 @@
 #' head(cbind(t,r,r_idx))     # Compare results
 #' @author Bjorn J. Brooks, Danny C. Lee, William W. Hargrove, Lars Y. Pomara
 #' @references Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-#'   Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+#'   Hargrove, W.W. (2017). Quantifying seasonal patterns in
 #'   disparate environmental variables using the PolarMetrics R package.
 #' @export
 
 rad2idx <- function(r, spc) {
   if (length(spc) == 1 & length(r) >= length(spc)) {
-    c <- spc/(2*pi) # Coefficient for conversion from radians to index
-    idx1 <- r*c # Convert to index units
-    idx2 <- ceiling(idx1) # Round up to nearest whole index value
+    c <- spc / (2 * pi)                            # Coef for conv, rad to idx
+    idx1 <- r * c                                  # Convert to index units
+    idx2 <- as.integer(ceiling(idx1))              # Round to nearest idx int
 
     return(idx2)
   } else {

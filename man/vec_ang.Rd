@@ -40,7 +40,7 @@ rv_ang <- vec_ang(vx,vy)    # Angle of resultant vec (point of max activity)
 }
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+  Hargrove, W.W. (2017). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
 \author{

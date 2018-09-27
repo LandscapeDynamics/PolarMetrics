@@ -37,7 +37,7 @@ vx <- vec.x(r,v)           # The horizontal vector components
 }
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+  Hargrove, W.W. (2017). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
 \author{

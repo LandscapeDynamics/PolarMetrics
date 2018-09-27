@@ -57,13 +57,13 @@ vx <- mean(vec.x(r,v), na.rm=TRUE) # Avg horizontal vector
 vy <- mean(vec.y(r,v), na.rm=TRUE) # Avg vertical vector
 rv_ang <- vec_ang(vx,vy)  # Angle of the resultant vector (the direction
   # that the average vector points)
-avec_ang <- avec_ang(rv_ang)  # Angle marking point of least activity
-av_idx <- rad2idx(avec_ang, spc=spy) # Index (1-spc) marking avg start of yr
+av_ang <- avec_ang(rv_ang)  # Angle marking point of least activity
+av_idx <- rad2idx(av_ang, spc=spy) # Index (1-spc) marking avg start of yr
 ann_cum <- sum_cycle(v,av_idx,spc=spy)$cumsum # Accum. vals within each yr
 }
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+  Hargrove, W.W. (2017). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
 \author{

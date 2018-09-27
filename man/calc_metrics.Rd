@@ -7,10 +7,11 @@
 calc_metrics(input, t = NULL, yr_type, spc, lcut, hcut, return_vecs, sin_cos)
 }
 \arguments{
-\item{input}{Either a vector of values or a column of an xts object
-indexed with time stamps. If \code{input} is an xts object then omit
-argument \code{t}. Else if \code{input} is a vector then a
-corresponding vector of values must be passed to \code{t}.}
+\item{input}{Either a vector/array of values or column(s) of an xts
+object indexed with time stamps. If \code{input} is an xts object
+then omit argument \code{t}. Else if \code{input} is a vector/array
+of values then a corresponding vector of time values must be passed
+to \code{t}.}
 
 \item{t}{An optional vector of time values (e.g., days) corresponding
 to the input vector sampling points. Do not use this argument if
@@ -68,9 +69,10 @@ metrics (data frame):     year,
                           ems_mag,                   # Mag early-mid ssn vec
                           lms_mag,                   # Mag late-mid ssn vec
                           a_avg                      # Avg data val of yr
-vectors (data frame):     VX, VY
-avg_vectors (data frame): rv_idx, rv_ang, rv_doy, rv_mag,
-                          avec_idx, avec_ang, avec_doy
+component_vectors (data frame): VX, VY               # Hrz, vert vec comp.
+average_vectors (data frame): rv_idx, rv_ang,        # Resultant vector
+                          rv_doy, rv_mag,            #  attributes
+                          av_idx, av_ang, av_doy     # Anti-vector attr.
 }
 \description{
 A basic, but fast function for calculating all polar
@@ -100,7 +102,7 @@ head(calc_metrics(input, yr_type='cal_yr', spc=46, lcut=0.15, hcut=0.8,
 }
 \references{
 Brooks, B.J., Lee, D.C., Desai, A.R., Pomara, L.Y.,
-  Hargrove, W.W. (accepted). Quantifying seasonal patterns in
+  Hargrove, W.W. (2017). Quantifying seasonal patterns in
   disparate environmental variables using the PolarMetrics R package.
 }
 \author{
