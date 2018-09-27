@@ -7,7 +7,7 @@ the devtools package installed.
 # If you don't have it yet, install 'devtools':
 install.packages('devtools')
 # Now install PolarMetrics ('zoo' will install automatically if not present)
-devtools::install_github('bjornbrooks/PolarMetrics')
+devtools::install_github('efetac/PolarMetrics')
 # The 'xts' package is recommended (but not required):
 install.packages('xts')
 # Refer to the manual for usefual demos. Then explore and enjoy!
