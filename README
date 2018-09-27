@@ -1,6 +1,8 @@
-PolarMetrics is an R package containing functions for analyzing seasonal
-patterns in environmental time series. You will first want to ensure you
-have the devtools package installed.
+PolarMetrics is an R library containing functions for analyzing seasonal
+patterns in environmental time series. It can be used by itself on any data
+or for pre-processing/data reduction, as with the "landat" R package and
+"landat_scripts". To install in R you will first want to ensure you have
+the devtools package installed.
 
 # If you don't have it yet, install 'devtools':
 install.packages('devtools')
