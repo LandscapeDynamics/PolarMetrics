@@ -201,13 +201,14 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
         output$ls_cos[J] <- cos(r[ls_idx])            # cos rad.ang. for LS
       }
     }
-    output$s_intv[J] <- ls - es # Days in the growing season
-    output$s_avg[J] <- mean(v[es_idx:ls_idx], na.rm=TRUE) # Mean for Seasn.
-    output$s_sd[J] <- sd(v[es_idx:ls_idx]) # Standard deviation for Seasn.
+    v_mu <- mean(v[es_idx:ls_idx], na.rm=TRUE)        # Mean for Seasn.
+    output$s_intv[J] <- ls - es                       # Days in the grw season
+    output$s_avg[J] <- v_mu                           # Mean for Seasn.
+    output$s_sd[J] <- sd(v[es_idx:ls_idx])            # Std. dev. for Seasn.
     output$a_avg[J] <- mean(v[be_idx[1]:be_idx[2]], na.rm=TRUE) # Full yr mean
-    # Magnitude (length) of average vector
-    output$s_mag[J] <- vec_mag(mean(VX[es_idx:(ls_idx-1)], na.rm=TRUE),
-                               mean(VY[es_idx:(ls_idx-1)], na.rm=TRUE))
+    VX_mu <- mean(VX[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean horizontal vector
+    VY_mu <- mean(VY[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean vertical vector
+    output$s_mag[J] <- vec_mag(VX_mu, VY_mu)          # Mag (length) of avg vec
     # s_mag standardized by mean NDVI during the growing season
     output$s_mag_std[J] <- output$s_mag[J] /
                            mean(v[es_idx:(ls_idx-1)], na.rm=TRUE)
