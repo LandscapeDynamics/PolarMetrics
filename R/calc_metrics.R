@@ -86,7 +86,7 @@
 #'   disparate environmental variables using the PolarMetrics R package.
 #' @export
 
-calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, sin_cos) {
+calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, lcut, hcut, return_vecs, sin_cos) {
   dpy <- 365 # Days per year
   if (is.null(t)) { # If no values supplied for t then obtain from xts index
     t <- as.integer(format(index(input), '%j')) # Time coordinates
@@ -145,11 +145,26 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     output$yr[J] <- J
     wi <- window_idx(ann_cum,npy,J,lcut,hcut) # early, mid, late-S ann_cum idx
     es_idx <- wi[1]
-    ems_idx <- wi[2]
-    ms_idx <- wi[3]
-    lms_idx <- wi[4]
     ls_idx <- wi[5]
     be_idx <- c((spc*(J-1)+1),(spc*J)) # This cycle's beg/end indices
+    VX_mu <- mean(VX[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean horizontal vector
+    VY_mu <- mean(VY[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean vertical vector
+		ms_ang <- vec_ang(VX_mu, VY_mu)                   # Angle of ssn avg vec
+		# Angle of early-to-mid season average vector
+		ems_ang <- vec_ang(mean(VX[es_idx:(ms_idx-1)], na.rm=TRUE),
+                       mean(VY[es_idx:(ms_idx-1)], na.rm=TRUE)
+		# Angle of mid-to-late season average vector
+		lms_ang <- vec_ang(mean(VX[ms_idx:(ls_idx-1)], na.rm=TRUE),
+                       mean(VY[ms_idx:(ls_idx-1)], na.rm=TRUE)
+		if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
+			ms_idx <- which.max(r[es_idx:ls_idx] > ms_ang)    # Index of MS milestone
+			ems_idx <- which.max(r[es_idx:(ms_idx-1)] > ems_ang) # Idx of EMS mlestne
+			lms_idx <- which.max(r[ms_idx:(ls_idx-1)] > lms_ang) # Idx of LMS mlestne
+		} else {                                # Else get indices from percentiles
+			ems_idx <- wi[2]
+			ms_idx <- wi[3]
+			lms_idx <- wi[4]
+		}
     es <- t[es_idx]                                   # DOY lcut, 15 %tile
     ems <- t[ems_idx]                                 # DOY for lcut+50/2
     ms <- t[ms_idx]                                   # DOY for 50 %tile
@@ -206,8 +221,6 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     output$s_avg[J] <- v_mu
     output$s_sd[J] <- sd(v[es_idx:ls_idx])            # Std. dev. for Seasn.
     output$a_avg[J] <- mean(v[be_idx[1]:be_idx[2]], na.rm=TRUE) # Full yr mean
-    VX_mu <- mean(VX[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean horizontal vector
-    VY_mu <- mean(VY[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean vertical vector
     output$s_mag[J] <- vec_mag(VX_mu, VY_mu)          # Mag (length) of avg vec
     # s_mag standardized by mean NDVI during the growing season
     output$s_mag_std[J] <- output$s_mag[J] /
