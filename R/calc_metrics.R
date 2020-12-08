@@ -201,9 +201,9 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
         output$ls_cos[J] <- cos(r[ls_idx])            # cos rad.ang. for LS
       }
     }
-    v_mu <- mean(v[es_idx:ls_idx], na.rm=TRUE)        # Mean for Seasn.
     output$s_intv[J] <- ls - es                       # Days in the grw season
-    output$s_avg[J] <- v_mu                           # Mean for Seasn.
+    v_mu <- mean(v[es_idx:ls_idx], na.rm=TRUE)        # Mean for Seasn.
+    output$s_avg[J] <- v_mu
     output$s_sd[J] <- sd(v[es_idx:ls_idx])            # Std. dev. for Seasn.
     output$a_avg[J] <- mean(v[be_idx[1]:be_idx[2]], na.rm=TRUE) # Full yr mean
     VX_mu <- mean(VX[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean horizontal vector
