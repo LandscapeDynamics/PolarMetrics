@@ -58,6 +58,7 @@
 #'                           s_mag,                     # Mag of avg vec in ssn
 #'                           ems_mag,                   # Mag early-mid ssn vec
 #'                           lms_mag,                   # Mag late-mid ssn vec
+#'                           s_mag_std,                 # s_mag stdzd by GS NDVI
 #'                           a_avg                      # Avg data val of yr
 #' component_vectors (data frame): VX, VY               # Hrz, vert vec comp.
 #' average_vectors (data frame): rv_idx, rv_ang,        # Resultant vector
@@ -97,7 +98,7 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
   }
   nyr <- length(input)/spc  # No. of years in input
   r <- t2rad(t, dpc=dpy)    # Transform days of year to radians
-  v <- as.vector(input)
+  v <- as.vector(input)     # Input values (e.g., NDVI)
   VX <- vec.x(r,v)        # Horizontal vectors
   VY <- vec.y(r,v)        # Vertical vectors
   vx <- mean(VX, na.rm=T) # Avg horizontal vector
@@ -121,6 +122,7 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
                          ms=rep(NA,npy), lms=rep(NA,npy), ls=rep(NA,npy),
                          s_intv=rep(NA,npy), s_avg=rep(NA,npy),
                          s_sd=rep(NA,npy), s_mag=rep(NA,npy),
+                         s_mag_std=rep(NA,npy),
                          ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
                          a_avg=rep(NA,npy))
   } else if (isTRUE(sin_cos)) { # if true
@@ -129,6 +131,7 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
                          ms=rep(NA,npy), lms=rep(NA,npy), ls=rep(NA,npy),
                          s_intv=rep(NA,npy), s_avg=rep(NA,npy),
                          s_sd=rep(NA,npy), s_mag=rep(NA,npy),
+                         s_mag_std=rep(NA,npy),
                          ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
 			 a_avg=rep(NA,npy),
 			 es_sin=rep(NA,npy), es_cos=rep(NA,npy),
@@ -146,7 +149,7 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     ms_idx <- wi[3]
     lms_idx <- wi[4]
     ls_idx <- wi[5]
-    be_idx = c((spc*(J-1)+1),(spc*J)) # This cycle's beg/end indices
+    be_idx <- c((spc*(J-1)+1),(spc*J)) # This cycle's beg/end indices
     es <- t[es_idx]                                   # DOY lcut, 15 %tile
     ems <- t[ems_idx]                                 # DOY for lcut+50/2
     ms <- t[ms_idx]                                   # DOY for 50 %tile
@@ -205,6 +208,8 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     # Magnitude (length) of average vector
     output$s_mag[J] <- vec_mag(mean(VX[es_idx:ls_idx], na.rm=TRUE),
                               mean(VY[es_idx:ls_idx], na.rm=TRUE))
+    # s_mag standardized by mean NDVI during the growing season
+    output$s_mag_std[J] <- output$s_mag[J] / v[es_idx:(ls_idx-1)]
     # Magnitude of avg vec between ES & MS thresholds
     output$ems_mag[J] <- vec_mag(mean(VX[es_idx:(ms_idx-1)],
                                       na.rm=TRUE),
