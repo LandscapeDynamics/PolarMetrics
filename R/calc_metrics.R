@@ -207,9 +207,10 @@ calc_metrics <- function(input, t=NULL, yr_type, spc, lcut, hcut, return_vecs, s
     output$a_avg[J] <- mean(v[be_idx[1]:be_idx[2]], na.rm=TRUE) # Full yr mean
     # Magnitude (length) of average vector
     output$s_mag[J] <- vec_mag(mean(VX[es_idx:(ls_idx-1)], na.rm=TRUE),
-                              mean(VY[es_idx:(ls_idx-1)], na.rm=TRUE))
+                               mean(VY[es_idx:(ls_idx-1)], na.rm=TRUE))
     # s_mag standardized by mean NDVI during the growing season
-    output$s_mag_std[J] <- output$s_mag[J] / v[es_idx:(ls_idx-1)]
+    output$s_mag_std[J] <- output$s_mag[J] /
+                           mean(v[es_idx:(ls_idx-1)], na.rm=TRUE)
     # Magnitude of avg vec between ES & MS thresholds
     output$ems_mag[J] <- vec_mag(mean(VX[es_idx:(ms_idx-1)],
                                       na.rm=TRUE),
