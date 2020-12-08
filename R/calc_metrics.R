@@ -152,6 +152,12 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
 		ms_ang <- vec_ang(VX_mu, VY_mu)                   # Angle of ssn avg vec
 		if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
 			ms_idx <- which.max(r[es_idx:ls_idx] > ms_ang)    # Index of MS milestone
+			# Angle of early-to-mid season average vector
+			ems_ang <- vec_ang(mean(VX[es_idx:(ms_idx-1)], na.rm=TRUE),
+                         mean(VY[es_idx:(ms_idx-1)], na.rm=TRUE))
+			# Angle of mid-to-late season average vector
+			lms_ang <- vec_ang(mean(VX[ms_idx:(ls_idx-1)], na.rm=TRUE),
+                         mean(VY[ms_idx:(ls_idx-1)], na.rm=TRUE))
 			ems_idx <- which.max(r[es_idx:(ms_idx-1)] > ems_ang) # Idx of EMS mlestne
 			lms_idx <- which.max(r[ms_idx:(ls_idx-1)] > lms_ang) # Idx of LMS mlestne
 		} else {                                # Else get indices from percentiles
@@ -159,12 +165,6 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
 			ms_idx <- wi[3]
 			lms_idx <- wi[4]
 		}
-		# Angle of early-to-mid season average vector
-		ems_ang <- vec_ang(mean(VX[es_idx:(ms_idx-1)], na.rm=TRUE),
-                       mean(VY[es_idx:(ms_idx-1)], na.rm=TRUE))
-		# Angle of mid-to-late season average vector
-		lms_ang <- vec_ang(mean(VX[ms_idx:(ls_idx-1)], na.rm=TRUE),
-                       mean(VY[ms_idx:(ls_idx-1)], na.rm=TRUE))
     es <- t[es_idx]                                   # DOY lcut, 15 %tile
     ems <- t[ems_idx]                                 # DOY for lcut+50/2
     ms <- t[ms_idx]                                   # DOY for 50 %tile
