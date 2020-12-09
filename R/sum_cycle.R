@@ -59,8 +59,8 @@ sum_cycle <- function(v,b,spc) {
       for (I in 1:c) {
         begidx.v <- 1+(spc*(I-1))                  # Beginning index
         endidx.v <- spc*I	                   # Ending index
-        begidx.cs <- 1+(spc*(I-1))
-        endidx.cs <- spc*I
+        begidx.cs <- begidx.v
+        endidx.cs <- endidx.v
         cs[begidx.cs:endidx.cs] <- cumsum(v[begidx.v:endidx.v]) # Cum sum
         idx[begidx.cs:endidx.cs] <- begidx.v:endidx.v # Corresp. idx in input
       }
