@@ -118,27 +118,27 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
 
   if (!isTRUE(sin_cos)) { # if false
     output <- data.frame(yr=rep(NA,npy),
-			 es=rep(NA,npy), ems=rep(NA,npy),
-                         ms=rep(NA,npy), lms=rep(NA,npy), ls=rep(NA,npy),
-                         s_intv=rep(NA,npy), s_avg=rep(NA,npy),
-                         s_sd=rep(NA,npy), s_mag=rep(NA,npy),
-                         s_mag_std=rep(NA,npy),
-                         ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
-                         a_avg=rep(NA,npy))
+    es=rep(NA,npy), ems=rep(NA,npy),
+                    ms=rep(NA,npy), lms=rep(NA,npy), ls=rep(NA,npy),
+                    s_intv=rep(NA,npy), s_avg=rep(NA,npy),
+                    s_sd=rep(NA,npy), s_mag=rep(NA,npy),
+                    s_mag_std=rep(NA,npy),
+                    ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
+                    a_avg=rep(NA,npy))
   } else if (isTRUE(sin_cos)) { # if true
     output <- data.frame(yr=rep(NA,npy),
-			 es=rep(NA,npy), ems=rep(NA,npy),
-                         ms=rep(NA,npy), lms=rep(NA,npy), ls=rep(NA,npy),
-                         s_intv=rep(NA,npy), s_avg=rep(NA,npy),
-                         s_sd=rep(NA,npy), s_mag=rep(NA,npy),
-                         s_mag_std=rep(NA,npy),
-                         ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
-			 a_avg=rep(NA,npy),
-			 es_sin=rep(NA,npy), es_cos=rep(NA,npy),
-			 ems_sin=rep(NA,npy), ems_cos=rep(NA,npy),
-			 ms_sin=rep(NA,npy), ms_cos=rep(NA,npy),
-			 lms_sin=rep(NA,npy), lms_cos=rep(NA,npy),
-			 ls_sin=rep(NA,npy), ls_cos=rep(NA,npy))
+    es=rep(NA,npy), ems=rep(NA,npy),
+                    ms=rep(NA,npy), lms=rep(NA,npy), ls=rep(NA,npy),
+                    s_intv=rep(NA,npy), s_avg=rep(NA,npy),
+                    s_sd=rep(NA,npy), s_mag=rep(NA,npy),
+                    s_mag_std=rep(NA,npy),
+                    ems_mag=rep(NA,npy), lms_mag=rep(NA,npy),
+    a_avg=rep(NA,npy),
+    es_sin=rep(NA,npy), es_cos=rep(NA,npy),
+    ems_sin=rep(NA,npy), ems_cos=rep(NA,npy),
+    ms_sin=rep(NA,npy), ms_cos=rep(NA,npy),
+    lms_sin=rep(NA,npy), lms_cos=rep(NA,npy),
+    ls_sin=rep(NA,npy), ls_cos=rep(NA,npy))
   }
 
   for (J in 1:npy) { # Calculate pheno param's for each yr
@@ -149,22 +149,22 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     be_idx <- c((spc*(J-1)+1),(spc*J)) # This cycle's beg/end indices
     VX_mu <- mean(VX[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean horizontal vector
     VY_mu <- mean(VY[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean vertical vector
-		ms_ang <- vec_ang(VX_mu, VY_mu)                   # Angle of ssn avg vec
-		if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
-			ms_idx <- which.max(r[es_idx:ls_idx] > ms_ang)    # Index of MS milestone
-			# Angle of early-to-mid season average vector
-			ems_ang <- vec_ang(mean(VX[es_idx:(ms_idx-1)], na.rm=TRUE),
+    ms_ang <- vec_ang(VX_mu, VY_mu)                   # Angle of ssn avg vec
+    if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
+      ms_idx <- which.max(r[es_idx:ls_idx] > ms_ang)    # Index of MS milestone
+      # Angle of early-to-mid season average vector
+      ems_ang <- vec_ang(mean(VX[es_idx:(ms_idx-1)], na.rm=TRUE),
                          mean(VY[es_idx:(ms_idx-1)], na.rm=TRUE))
-			# Angle of mid-to-late season average vector
-			lms_ang <- vec_ang(mean(VX[ms_idx:(ls_idx-1)], na.rm=TRUE),
+      # Angle of mid-to-late season average vector
+      lms_ang <- vec_ang(mean(VX[ms_idx:(ls_idx-1)], na.rm=TRUE),
                          mean(VY[ms_idx:(ls_idx-1)], na.rm=TRUE))
-			ems_idx <- which.max(r[es_idx:(ms_idx-1)] > ems_ang) # Idx of EMS mlestne
-			lms_idx <- which.max(r[ms_idx:(ls_idx-1)] > lms_ang) # Idx of LMS mlestne
-		} else {                                # Else get indices from percentiles
-			ems_idx <- wi[2]
-			ms_idx <- wi[3]
-			lms_idx <- wi[4]
-		}
+      ems_idx <- which.max(r[es_idx:(ms_idx-1)] > ems_ang) # Idx of EMS mlestne
+      lms_idx <- which.max(r[ms_idx:(ls_idx-1)] > lms_ang) # Idx of LMS mlestne
+    } else {                                # Else get indices from percentiles
+      ems_idx <- wi[2]
+      ms_idx <- wi[3]
+      lms_idx <- wi[4]
+    }
     es <- t[es_idx]                                   # DOY lcut, 15 %tile
     ems <- t[ems_idx]                                 # DOY for lcut+50/2
     ms <- t[ms_idx]                                   # DOY for 50 %tile
@@ -173,15 +173,15 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     if (yr_type == 'cal_yr') {
       # Timing variables relative to the calendar year
       output$es[J] <- as.integer(ceiling((es +        # DOY for ES milestone
-					  av_doy) %% dpy))
+                                          av_doy) %% dpy))
       output$ems[J] <- as.integer(ceiling((ems +      # DOY for EMS milestone
-					   av_doy) %% dpy))
+                                           av_doy) %% dpy))
       output$ms[J] <- as.integer(ceiling((ms +        # DOY for MS milestone
-					  av_doy) %% dpy))
+                                          av_doy) %% dpy))
       output$lms[J] <- as.integer(ceiling((lms +      # DOY for MLS milestone
-					   av_doy) %% dpy))
+                                           av_doy) %% dpy))
       output$ls[J] <- as.integer(ceiling((ls +        # DOY for LS milestone
-					  av_doy) %% dpy))
+                                          av_doy) %% dpy))
       if (isTRUE(sin_cos)) {
         # Sine, cosine timing variables relative to the calendar year
         output$es_sin[J] <- sin(r[es_idx] + av_ang)   # sin rad.ang. for ES
@@ -226,13 +226,11 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     output$s_mag_std[J] <- output$s_mag[J] /
                            mean(v[es_idx:(ls_idx-1)], na.rm=TRUE)
     # Magnitude of avg vec between ES & MS thresholds
-    output$ems_mag[J] <- vec_mag(mean(VX[es_idx:(ms_idx-1)],
-                                      na.rm=TRUE),
+    output$ems_mag[J] <- vec_mag(mean(VX[es_idx:(ms_idx-1)], na.rm=TRUE),
                           mean(VY[es_idx:(ms_idx-1)], na.rm=TRUE))
     # Magnitude of avg vec between MS & LS thresholds
-    output$lms_mag[J] <- vec_mag(mean(VX[ms_idx:(ls_idx-1)],
-                                      na.rm=TRUE),
-                          mean(VY[ms_idx:(ls_idx-1)], na.rm=TRUE))
+    output$lms_mag[J] <- vec_mag(mean(VX[ms_idx:(ls_idx-1)],na.rm=TRUE),
+                                 mean(VY[ms_idx:(ls_idx-1)], na.rm=TRUE))
   }
 
   if (!isTRUE(return_vecs)) { # if false
@@ -240,11 +238,11 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
   }  else if (isTRUE(return_vecs)) { # if true
     # If vector components requested then return by combining as list object
     output <- list('metrics' <- output,
-		   'component_vectors' <- data.frame(VX=VX, VY=VY),
+                   'component_vectors' <- data.frame(VX=VX, VY=VY),
                    'average_vectors' <- data.frame(rv_idx=rv_idx,
-				   rv_ang=rv_ang, rv_doy=rv_doy,
-				   rv_mag=rv_mag, av_idx=av_idx,
-				   av_ang=av_ang, av_doy=av_doy))
+                                                   rv_ang=rv_ang, rv_doy=rv_doy,
+                                                   rv_mag=rv_mag, av_idx=av_idx,
+                                                   av_ang=av_ang, av_doy=av_doy))
     return(output)
   }
 }
