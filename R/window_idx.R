@@ -64,13 +64,15 @@
 #' ann_cum <- sum_cycle(v,av_idx,spc=spc)$cumsum # Accum. vals within each yr
 #' # Find seasonal beg, end index for the 2nd yr using 15th pctile of cum NDVI
 #' cy <- 2                    # The second yr of data (which is 2001 here)
-#' es.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[1] # Idx of ann_cum marking ES
-#' ms.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[2] # Idx of ann_cum marking MS
-#' ls.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[3] # Idx of ann_cum marking LS
+#' es.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[1]  # Idx of marking ES
+#' ems.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[2] # Idx for EMS
+#' ms.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[3]  # Idx for MS
+#' lms.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[4] # Idx for LMS
+#' ls.idx <- window_idx(ann_cum,c-1,cy,0.15,0.8)[5]  # Idx for LS
 #' es <- t[es.idx]          # Early growing season day of pheno yr
-#' ems <- t[es.idx]         # Early-mid growing season day of pheno yr
+#' ems <- t[ems.idx]        # Early-mid growing season day of pheno yr
 #' ms <- t[ms.idx]          # Mid (50th %tile) growing season day
-#' lms <- t[ls.idx]         # Late-mid growing season day of pheno yr
+#' lms <- t[lms.idx]        # Late-mid growing season day of pheno yr
 #' ls <- t[ls.idx]          # Late growing season day of pheno yr
 #' Sintv <- ls-es           # Days in the growing season
 #' ann_cum[es.idx:ls.idx]   # Show cumulative NDVI vals for growing season
