@@ -52,27 +52,27 @@
 
 sum_cycle <- function(v,b,spc) {
   if (b <= spc & length(spc) == 1 & length(v) %% spc == 0 & length(v) > length(spc) & (length(v)/spc) > 1) {
-    c <- length(v)/spc				   # Num. of cycles
+    c <- length(v)/spc				                     # Num. of cycles
     if (b %% spc == 0) { # Special case if natural (phenological) yr not offset
-      cs <- c(NA,spc*c)                            # Initialize
-      idx <- c(NA,spc*c)                           # Initialize
+      cs <- c(NA,spc*c)                            # Initialize cumsum
+      idx <- c(NA,spc*c)                           # Initialize index
       for (I in 1:c) {
-        begidx.v <- 1+(spc*(I-1))                  # Beginning index
-        endidx.v <- spc*I	                   # Ending index
-        begidx.cs <- begidx.v
-        endidx.cs <- endidx.v
-        cs[begidx.cs:endidx.cs] <- cumsum(v[begidx.v:endidx.v]) # Cum sum
+        begidx.v <- 1+(spc*(I-1))                  # Beginning index input
+        endidx.v <- spc*I	                         # Ending index input
+        begidx.cs <- begidx.v                      # Beginning index cumsum
+        endidx.cs <- endidx.v                      # Ending index cumsum
+        cs[begidx.cs:endidx.cs] <- cumsum(v[begidx.v:endidx.v]) # cumsum
         idx[begidx.cs:endidx.cs] <- begidx.v:endidx.v # Corresp. idx in input
       }
-    } else { # If natural (phenological) yr is offset
-      cs <- c(NA,spc*(c-1)) # Initialize cumsum variable with room for c-1 cycles
-      idx <- c(NA,spc*(c-1)) # Initialize index variable with room for c-1 cycles
+    } else {             # If natural (phenological) yr is offset
+      cs <- c(NA,spc*(c-1))   # Init. cumsum variable with room for c-1 cycles
+      idx <- c(NA,spc*(c-1))  # Init. index variable with room for c-1 cycles
       for (I in 1:(c-1)) {
-        begidx.v <- b+(spc*(I-1))                  # Beginning index
-        endidx.v <- b+(spc*I)-1	                   # Ending index
-        begidx.cs <- 1+(spc*(I-1))
-        endidx.cs <- spc*I
-        cs[begidx.cs:endidx.cs] <- cumsum(v[begidx.v:endidx.v]) # Cum sum
+        begidx.v <- b+(spc*(I-1))                  # Beginning index input
+        endidx.v <- b+(spc*I)-1	                   # Ending index input
+        begidx.cs <- 1+(spc*(I-1))                 # Beginning index cumsum
+        endidx.cs <- spc*I                         # Ending index cumsum
+        cs[begidx.cs:endidx.cs] <- cumsum(v[begidx.v:endidx.v]) # cumsum
         idx[begidx.cs:endidx.cs] <- begidx.v:endidx.v # Corresp. idx in input
       }
     }
