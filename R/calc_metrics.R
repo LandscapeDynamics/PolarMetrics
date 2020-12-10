@@ -149,8 +149,8 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     be_idx <- c((spc*(J-1)+1),(spc*J))        # This cycle's beg/end indices
     es2ls <- es_idx:(ls_idx-1)                        # ann_cum idx from es2ls
     VXY_es2ls <- cbind(VX[es2ls], VY[es2ls]) # Component vecs from es to ls
-    ms_ang <- mean(vec_ang(VXY_es2ls), na.rm=TRUE) # Avg GS vector angle 
     if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
+      ms_ang <- mean(vec_ang(VXY_es2ls), na.rm=TRUE) # Avg GS vector angle 
       ms_idx <- which.max(r[es2ls] > ms_ang)    # Index of MS milestone
       es2ms <- es_idx:(ms_idx-1)                      # ann_cum idx erly to mid
       ms2ls <- ms_idx:(ls_idx-1)                      # ann_cum idx mid to late
@@ -168,6 +168,8 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
       ems_idx <- wi[2]
       ms_idx <- wi[3]
       lms_idx <- wi[4]
+      es2ms <- es_idx:(ms_idx-1)                      # ann_cum idx erly to mid
+      ms2ls <- ms_idx:(ls_idx-1)                      # ann_cum idx mid to late
     }
     es <- t[es_idx]                                   # DOY lcut, 15 %tile
     ems <- t[ems_idx]                                 # DOY for lcut+50/2
