@@ -152,16 +152,18 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     ms_ang <- mean(vec_ang(VXY_es2ls), na.rm=TRUE) # Avg GS vector angle 
     if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
       ms_idx <- which.max(r[es2ls] > ms_ang)    # Index of MS milestone
-      VXY_es2ms <- cbind(VX[es_idx:(ms_idx-1)], # Component vecs from es to ms
-                         VY[es_idx:(ms_idx-1)])
-      VXY_ms2ls <- cbind(VX[ms_idx:(ls_idx-1)], # Component vecs from ms to ls
-                         VY[ms_idx:(ls_idx-1)])
+      es2ms <- es_idx:(ms_idx-1)                      # ann_cum idx erly to mid
+      ms2ls <- ms_idx:(ls_idx-1)                      # ann_cum idx mid to late
+      VXY_es2ms <- cbind(VX[es2ms], # Component vecs from es to ms
+                         VY[es2ms])
+      VXY_ms2ls <- cbind(VX[ms2ls], # Component vecs from ms to ls
+                         VY[ms2ls])
       # Angle of early-to-mid season average vector
       ems_ang <- mean(vec_ang(VXY_es2ms), na.rm=TRUE)
       # Angle of mid-to-late season average vector
       lms_ang <- mean(vec_ang(VXY_ms2ls), na.rm=TRUE)
-      ems_idx <- which.max(r[es_idx:(ms_idx-1)] > ems_ang) # Idx of EMS mlestne
-      lms_idx <- which.max(r[ms_idx:(ls_idx-1)] > lms_ang) # Idx of LMS mlestne
+      ems_idx <- which.max(r[es2ms] > ems_ang) # Idx of EMS mlestne
+      lms_idx <- which.max(r[ms2ls] > lms_ang) # Idx of LMS mlestne
     } else {                                # Else get indices from percentiles
       ems_idx <- wi[2]
       ms_idx <- wi[3]
