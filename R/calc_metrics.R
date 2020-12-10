@@ -146,10 +146,9 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     wi <- window_idx(ann_cum,npy,J,lcut,hcut) # early, mid, late-S ann_cum idx
     es_idx <- wi[1]
     ls_idx <- wi[5]
-    be_idx <- c((spc*(J-1)+1),(spc*J)) # This cycle's beg/end indices
-    VX_mu <- mean(VX[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean horizontal vector
-    VY_mu <- mean(VY[es_idx:(ls_idx-1)], na.rm=TRUE)  # Mean vertical vector
-    ms_ang <- vec_ang(VX_mu, VY_mu)                   # Angle of ssn avg vec
+    be_idx <- c((spc*(J-1)+1),(spc*J))        # This cycle's beg/end indices
+    ms_ang <- mean(vec_ang(VX[es_idx:(ls_idx-1)],     # Avg GS vector angle 
+                           VY[es_idx:(ls_idx-1)]), na.rm=TRUE)
     if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
       ms_idx <- which.max(r[es_idx:ls_idx] > ms_ang)    # Index of MS milestone
       # Angle of early-to-mid season average vector
@@ -221,7 +220,8 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     output$s_avg[J] <- v_mu
     output$s_sd[J] <- sd(v[es_idx:ls_idx])            # Std. dev. for Seasn.
     output$a_avg[J] <- mean(v[be_idx[1]:be_idx[2]], na.rm=TRUE) # Full yr mean
-    output$s_mag[J] <- vec_mag(VX_mu, VY_mu)          # Mag (length) of avg vec
+    output$s_mag[J] <- mean(vec_mag(VX[es_idx:(ls_idx-1)], # Avg GS vector le-
+                                    VY[es_idx:(ls_idx-1)]), na.rm=TRUE) # ngth
     # s_mag standardized by mean NDVI during the growing season
     output$s_mag_std[J] <- output$s_mag[J] /
                            mean(v[es_idx:(ls_idx-1)], na.rm=TRUE)
