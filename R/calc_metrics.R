@@ -150,7 +150,7 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     es2ls <- es_idx:(ls_idx-1)                        # ann_cum idx from es2ls
     if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
       ms_ang <- mean(vec_ang(VX[es2ls], VY[es2ls]), na.rm=TRUE) # Avg GS vector angle 
-      ms_idx <- which.max(r[es2ls] > ms_ang)    # Index of MS milestone
+      ms_idx <- which.max(r[es2ls] > ms_ang) + es_idx # Index of MS milestone
       es2ms <- es_idx:(ms_idx-1)                      # ann_cum idx erly to mid
       ms2ls <- ms_idx:(ls_idx-1)                      # ann_cum idx mid to late
       # Angle of early-to-mid season average vector
