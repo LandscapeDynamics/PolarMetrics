@@ -152,11 +152,11 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
       ms_idx <- which.max(r[es_idx:ls_idx] > ms_ang)    # Index of MS milestone
       # Angle of early-to-mid season average vector
-      ems_ang <- vec_ang(mean(VX[es_idx:(ms_idx-1)], na.rm=TRUE),
-                         mean(VY[es_idx:(ms_idx-1)], na.rm=TRUE))
+      ems_ang <- mean(vec_ang(VX[es_idx:(ms_idx-1)],
+                              VY[es_idx:(ms_idx-1)]), na.rm=TRUE)
       # Angle of mid-to-late season average vector
-      lms_ang <- vec_ang(mean(VX[ms_idx:(ls_idx-1)], na.rm=TRUE),
-                         mean(VY[ms_idx:(ls_idx-1)], na.rm=TRUE))
+      lms_ang <- mean(vec_ang(VX[ms_idx:(ls_idx-1)],
+                              VY[ms_idx:(ls_idx-1)]), na.rm=TRUE)
       ems_idx <- which.max(r[es_idx:(ms_idx-1)] > ems_ang) # Idx of EMS mlestne
       lms_idx <- which.max(r[ms_idx:(ls_idx-1)] > lms_ang) # Idx of LMS mlestne
     } else {                                # Else get indices from percentiles
@@ -226,11 +226,11 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     output$s_mag_std[J] <- output$s_mag[J] /
                            mean(v[es_idx:(ls_idx-1)], na.rm=TRUE)
     # Magnitude of avg vec between ES & MS thresholds
-    output$ems_mag[J] <- vec_mag(mean(VX[es_idx:(ms_idx-1)], na.rm=TRUE),
-                          mean(VY[es_idx:(ms_idx-1)], na.rm=TRUE))
+    output$ems_mag[J] <- mean(vec_mag(VX[es_idx:(ms_idx-1)],
+                                      VY[es_idx:(ms_idx-1)]), na.rm=TRUE)
     # Magnitude of avg vec between MS & LS thresholds
-    output$lms_mag[J] <- vec_mag(mean(VX[ms_idx:(ls_idx-1)],na.rm=TRUE),
-                                 mean(VY[ms_idx:(ls_idx-1)], na.rm=TRUE))
+    output$lms_mag[J] <- mean(vec_mag(VX[ms_idx:(ls_idx-1)],
+                                      VY[ms_idx:(ls_idx-1)]), na.rm=TRUE)
   }
 
   if (!isTRUE(return_vecs)) { # if false
