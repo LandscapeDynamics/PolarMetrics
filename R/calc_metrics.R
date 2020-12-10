@@ -147,11 +147,11 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     es_idx <- wi[1]
     ls_idx <- wi[5]
     be_idx <- c((spc*(J-1)+1),(spc*J))        # This cycle's beg/end indices
-    VXY_es2ls <- cbind(VX[es_idx:(ls_idx-1)], # Component vecs from es to ls
-                       VY[es_idx:(ls_idx-1)])
+    es2ls <- es_idx:(ls_idx-1)                        # ann_cum idx from es2ls
+    VXY_es2ls <- cbind(VX[es2ls], VY[es2ls]) # Component vecs from es to ls
     ms_ang <- mean(vec_ang(VXY_es2ls), na.rm=TRUE) # Avg GS vector angle 
     if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
-      ms_idx <- which.max(r[es_idx:ls_idx] > ms_ang)    # Index of MS milestone
+      ms_idx <- which.max(r[es2ls] > ms_ang)    # Index of MS milestone
       VXY_es2ms <- cbind(VX[es_idx:(ms_idx-1)], # Component vecs from es to ms
                          VY[es_idx:(ms_idx-1)])
       VXY_ms2ls <- cbind(VX[ms_idx:(ls_idx-1)], # Component vecs from ms to ls
@@ -219,15 +219,15 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
       }
     }
     output$s_intv[J] <- ls - es                       # Days in the grw season
-    v_mu <- mean(v[es_idx:ls_idx], na.rm=TRUE)        # Mean for Seasn.
+    v_mu <- mean(v[es2ls], na.rm=TRUE)        # Mean for Seasn.
     output$s_avg[J] <- v_mu
-    output$s_sd[J] <- sd(v[es_idx:ls_idx])            # Std. dev. for Seasn.
+    output$s_sd[J] <- sd(v[es2ls])            # Std. dev. for Seasn.
     output$a_avg[J] <- mean(v[be_idx[1]:be_idx[2]], na.rm=TRUE) # Full yr mean
     output$s_mag[J] <- mean(vec_mag(VXY_es2ls),       # Avg GS vector length
                             na.rm=TRUE)
     # s_mag standardized by mean NDVI during the growing season
     output$s_mag_std[J] <- output$s_mag[J] /
-                           mean(v[es_idx:(ls_idx-1)], na.rm=TRUE)
+                           mean(v[es2ls], na.rm=TRUE)
     # Magnitude of avg vec between ES & MS thresholds
     output$ems_mag[J] <- mean(vec_mag(VXY_es2ms), na.rm=TRUE)
     # Magnitude of avg vec between MS & LS thresholds
