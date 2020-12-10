@@ -147,16 +147,19 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     es_idx <- wi[1]
     ls_idx <- wi[5]
     be_idx <- c((spc*(J-1)+1),(spc*J))        # This cycle's beg/end indices
-    ms_ang <- mean(vec_ang(VX[es_idx:(ls_idx-1)],     # Avg GS vector angle 
-                           VY[es_idx:(ls_idx-1)]), na.rm=TRUE)
+    VXY_es2ls <- cbind(VX[es_idx:(ls_idx-1)], # Component vecs from es to ls
+                       VY[es_idx:(ls_idx-1)])
+    ms_ang <- mean(vec_ang(VXY_es2ls), na.rm=TRUE) # Avg GS vector angle 
     if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
       ms_idx <- which.max(r[es_idx:ls_idx] > ms_ang)    # Index of MS milestone
+      VXY_es2ms <- cbind(VX[es_idx:(ms_idx-1)], # Component vecs from es to ms
+                         VY[es_idx:(ms_idx-1)])
+      VXY_ms2ls <- cbind(VX[ms_idx:(ls_idx-1)], # Component vecs from ms to ls
+                         VY[ms_idx:(ls_idx-1)])
       # Angle of early-to-mid season average vector
-      ems_ang <- mean(vec_ang(VX[es_idx:(ms_idx-1)],
-                              VY[es_idx:(ms_idx-1)]), na.rm=TRUE)
+      ems_ang <- mean(vec_ang(VXY_es2ms), na.rm=TRUE)
       # Angle of mid-to-late season average vector
-      lms_ang <- mean(vec_ang(VX[ms_idx:(ls_idx-1)],
-                              VY[ms_idx:(ls_idx-1)]), na.rm=TRUE)
+      lms_ang <- mean(vec_ang(VXY_ms2ls), na.rm=TRUE)
       ems_idx <- which.max(r[es_idx:(ms_idx-1)] > ems_ang) # Idx of EMS mlestne
       lms_idx <- which.max(r[ms_idx:(ls_idx-1)] > lms_ang) # Idx of LMS mlestne
     } else {                                # Else get indices from percentiles
@@ -220,17 +223,15 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     output$s_avg[J] <- v_mu
     output$s_sd[J] <- sd(v[es_idx:ls_idx])            # Std. dev. for Seasn.
     output$a_avg[J] <- mean(v[be_idx[1]:be_idx[2]], na.rm=TRUE) # Full yr mean
-    output$s_mag[J] <- mean(vec_mag(VX[es_idx:(ls_idx-1)], # Avg GS vector le-
-                                    VY[es_idx:(ls_idx-1)]), na.rm=TRUE) # ngth
+    output$s_mag[J] <- mean(vec_mag(VXY_es2ls),       # Avg GS vector length
+                            na.rm=TRUE)
     # s_mag standardized by mean NDVI during the growing season
     output$s_mag_std[J] <- output$s_mag[J] /
                            mean(v[es_idx:(ls_idx-1)], na.rm=TRUE)
     # Magnitude of avg vec between ES & MS thresholds
-    output$ems_mag[J] <- mean(vec_mag(VX[es_idx:(ms_idx-1)],
-                                      VY[es_idx:(ms_idx-1)]), na.rm=TRUE)
+    output$ems_mag[J] <- mean(vec_mag(VXY_es2ms), na.rm=TRUE)
     # Magnitude of avg vec between MS & LS thresholds
-    output$lms_mag[J] <- mean(vec_mag(VX[ms_idx:(ls_idx-1)],
-                                      VY[ms_idx:(ls_idx-1)]), na.rm=TRUE)
+    output$lms_mag[J] <- mean(vec_mag(VXY_ms2ls), na.rm=TRUE)
   }
 
   if (!isTRUE(return_vecs)) { # if false
