@@ -158,7 +158,7 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
       # Angle of mid-to-late season average vector
       lms_ang <- mean(vec_ang(VX[ms2ls], VY[ms2ls]), na.rm=TRUE)
       ems_idx <- which.max(r[es2ms] > ems_ang) + es_idx # Idx of EMS mlestne
-      lms_idx <- which.max(r[ms2ls] > lms_ang) + es_idx # Idx of LMS mlestne
+      lms_idx <- which.max(r[ms2ls] > lms_ang) + ms_idx # Idx of LMS mlestne
     } else {                                # Else get indices from percentiles
       ems_idx <- wi[2]
       ms_idx <- wi[3]
