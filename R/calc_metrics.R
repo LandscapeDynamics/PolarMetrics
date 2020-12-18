@@ -238,12 +238,21 @@ calc_metrics <- function(input, t=NULL, timing='from_vecs_integer', yr_type, spc
         # Sine, cosine timing variables relative to the calendar year
         output$es_sin[J] <- sin(r[es_idx] + av_ang)   # sin rad.ang. for ES
         output$es_cos[J] <- cos(r[es_idx] + av_ang)   # cos rad.ang. for ES
-        output$ems_sin[J] <- sin(r[ems_idx] + av_ang) # sin rad.ang. for EMS
-        output$ems_cos[J] <- cos(r[ems_idx] + av_ang) # cos rad.ang. for EMS
-        output$ms_sin[J] <- sin(r[ms_idx] + av_ang)   # sin rad.ang. for MS
-        output$ms_cos[J] <- cos(r[ms_idx] + av_ang)   # cos rad.ang. for MS
-        output$lms_sin[J] <- sin(r[lms_idx] + av_ang) # sin rad.ang. for LMS
-        output$lms_cos[J] <- cos(r[lms_idx] + av_ang) # cos rad.ang. for LMS
+  			if (all(timing == 'from_vecs_integer')) {
+ 					output$ems_sin[J] <- sin(ems_ang + av_ang)  # sin rad.ang. for EMS
+					output$ems_cos[J] <- cos(ems_ang + av_ang)  # cos rad.ang. for EMS
+					output$ms_sin[J] <- sin(ms_ang + av_ang)    # sin rad.ang. for MS
+					output$ms_cos[J] <- cos(ms_ang + av_ang)    # cos rad.ang. for MS
+					output$lms_sin[J] <- sin(lms_ang + av_ang)  # sin rad.ang. for LMS
+        	output$lms_cos[J] <- cos(lms_ang + av_ang)  # cos rad.ang. for LMS
+				} else {
+ 					output$ems_sin[J] <- sin(r[ems_idx] + av_ang) # sin rad.ang. for EMS
+					output$ems_cos[J] <- cos(r[ems_idx] + av_ang) # cos rad.ang. for EMS
+					output$ms_sin[J] <- sin(r[ms_idx] + av_ang)   # sin rad.ang. for MS
+					output$ms_cos[J] <- cos(r[ms_idx] + av_ang)   # cos rad.ang. for MS
+					output$lms_sin[J] <- sin(r[lms_idx] + av_ang) # sin rad.ang. for LMS
+        	output$lms_cos[J] <- cos(r[lms_idx] + av_ang) # cos rad.ang. for LMS
+				}
         output$ls_sin[J] <- sin(r[ls_idx] + av_ang)   # sin rad.ang. for LS
         output$ls_cos[J] <- cos(r[ls_idx] + av_ang)   # cos rad.ang. for LS
       }
@@ -258,12 +267,21 @@ calc_metrics <- function(input, t=NULL, timing='from_vecs_integer', yr_type, spc
         # Sine, cosine timing vars relative to the rotated yr
         output$es_sin[J] <- sin(r[es_idx])            # sin rad.ang. for ES
         output$es_cos[J] <- cos(r[es_idx])            # cos rad.ang. for ES
-        output$ems_sin[J] <- sin(r[ems_idx])          # sin rad.ang. for EMS
-        output$ems_cos[J] <- cos(r[ems_idx])          # cos rad.ang. for EMS
-        output$ms_sin[J] <- sin(r[ms_idx])            # sin rad.ang. for MS
-        output$ms_cos[J] <- cos(r[ms_idx])            # cos rad.ang. for MS
-        output$lms_sin[J] <- sin(r[lms_idx])          # sin rad.ang. for LMS
-        output$lms_cos[J] <- cos(r[lms_idx])          # cos rad.ang. for LMS
+  			if (all(timing == 'from_vecs_integer')) {
+ 					output$ems_sin[J] <- sin(ems_ang)           # sin rad.ang. for EMS
+					output$ems_cos[J] <- cos(ems_ang)           # cos rad.ang. for EMS
+					output$ms_sin[J] <- sin(ms_ang)             # sin rad.ang. for MS
+					output$ms_cos[J] <- cos(ms_ang)             # cos rad.ang. for MS
+					output$lms_sin[J] <- sin(lms_ang)           # sin rad.ang. for LMS
+        	output$lms_cos[J] <- cos(lms_ang)           # cos rad.ang. for LMS
+				} else {
+					output$ems_sin[J] <- sin(r[ems_idx])        # sin rad.ang. for EMS
+					output$ems_cos[J] <- cos(r[ems_idx])        # cos rad.ang. for EMS
+					output$ms_sin[J] <- sin(r[ms_idx])          # sin rad.ang. for MS
+					output$ms_cos[J] <- cos(r[ms_idx])          # cos rad.ang. for MS
+	        output$lms_sin[J] <- sin(r[lms_idx])        # sin rad.ang. for LMS
+        	output$lms_cos[J] <- cos(r[lms_idx])        # cos rad.ang. for LMS
+				}
         output$ls_sin[J] <- sin(r[ls_idx])            # sin rad.ang. for LS
         output$ls_cos[J] <- cos(r[ls_idx])            # cos rad.ang. for LS
       }
