@@ -14,6 +14,18 @@
 #' @param yr_type Argument specifying either 'cal_yr' for output (of
 #'   timing variables) given in days starting from Jan. 1, or 'rot_yr'
 #'   for output in days starting from the average seasonal minimum.
+#' @param timing Argument specifying 'from_vecs_integer' or
+#'   'from_vecs_dpc' or 'from_percentiles_dpc'. Default is 'from_vecs_integer',
+#'   which means the timing variable EMS, MS, & LMS will be calculated
+#'   from the mean of VECTORS within their respective milestones with a
+#'   precision to the nearest INTEGER (not the original dpc sampling of
+#'   the data). 'from_vecs_dpc' means the timing variables EMS, MS & LMS
+#'   will again be calculated from the mean of VECTORS, but only at one
+#'   of the 1->dpc sampling points. 'from_percentiles_dpc' means all timing
+#'   variables will be calculated from their percentile completion
+#'   milestones at one of dpc sampling points. Note that ES & LS
+#'   variables are always calculated from percentiles as is required by
+#'   this methodology of defining the range of the growing season.
 #' @param spc Integer value specifying the number of samples per cycle
 #'   (measurements per year) in input.
 #' @param lcut Numeric value in the range [0,0.5] passed to
@@ -86,7 +98,7 @@
 #'   disparate environmental variables using the PolarMetrics R package.
 #' @export
 
-calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, lcut, hcut, return_vecs, sin_cos) {
+calc_metrics <- function(input, t=NULL, timing='from_vecs_integer', yr_type, spc, lcut, hcut, return_vecs, sin_cos) {
   dpy <- 365 # Days per year
   if (is.null(t)) { # If no values supplied for t then obtain from xts index
     t <- as.integer(format(index(input), '%j')) # Time coordinates
@@ -96,6 +108,9 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
   if (length(input) != length(t)) {
     stop('input and t should be have the same number of values')
   }
+  if (all(timing != c('from_vecs_integer', 'from_vecs_dpc', 'from_percentiles_dpc'))) {
+    stop('Acceptable arguments for timing are: from_vecs_integer, from_vecs_dpc, or from_percentiles_dpc')
+	}
   nyr <- length(input)/spc  # No. of years in input
   r <- t2rad(t, dpc=dpy)    # Transform days of year to radians
   v <- as.vector(input)     # Input values (e.g., NDVI)
@@ -148,7 +163,29 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
     ls_idx <- wi[5]
     be_idx <- c((spc*(J-1)+1),(spc*J))        # This cycle's beg/end indices
     es2ls <- es_idx:(ls_idx-1)                        # ann_cum idx from es2ls
-    if (isTRUE(timing_from_vectors)) {           # Calculate from vector angles
+
+		# Calculate from VECTOR ANGLES & with DPY (365) divisions
+    if (timing == 'from_vecs_integer') {
+      ms_ang <- vec_ang(mean(VX[es2ls], na.rm=TRUE), # Avg GS vector angle 
+                        mean(VY[es2ls], na.rm=TRUE))
+      ms_idx <- which.max(r[es2ls] > ms_ang) + es_idx # Index of MS milestone
+      es2ms <- es_idx:(ms_idx-1)                      # ann_cum idx erly to mid
+      ms2ls <- ms_idx:(ls_idx-1)                      # ann_cum idx mid to late
+      # Angle of early-to-mid season average vector
+      ems_ang <- vec_ang(mean(VX[es2ms], na.rm=TRUE),
+                         mean(VY[es2ms], na.rm=TRUE))
+      # Angle of mid-to-late season average vector
+      lms_ang <- vec_ang(mean(VX[ms2ls], na.rm=TRUE),
+                         mean(VY[ms2ls], na.rm=TRUE))
+    	ms <- rad2d(ms_ang, dpc=dpy)        # DOY for mean vector between ES & LS
+			ems <- rad2d(ems_ang, dpc=dpy)       # DOY for mean vector between ES & MS
+	    lms <- rad2d(lms_ang, dpc=dpy)       # DOY for mean vector between MS & LS
+
+		# Calculate from VECTOR ANGLES & with DPC (divisions
+		#  per cycle) divisions. In the case of 8-day MODIS
+		#  NDVI, this means that the output timing dates will
+		#  only fall on one of the 46 8-day time points.
+    } else if (timing == 'from_vecs_dpc') {
       ms_ang <- vec_ang(mean(VX[es2ls], na.rm=TRUE), # Avg GS vector angle 
                         mean(VY[es2ls], na.rm=TRUE))
       ms_idx <- which.max(r[es2ls] > ms_ang) + es_idx # Index of MS milestone
@@ -162,17 +199,28 @@ calc_metrics <- function(input, t=NULL, timing_from_vectors=TRUE, yr_type, spc, 
                          mean(VY[ms2ls], na.rm=TRUE))
       ems_idx <- which.max(r[es2ms] > ems_ang) + es_idx # Idx of EMS mlestne
       lms_idx <- which.max(r[ms2ls] > lms_ang) + ms_idx # Idx of LMS mlestne
-    } else {                                # Else get indices from percentiles
+    	ems <- t[ems_idx]                               # DOY for lcut+50/2
+	    ms <- t[ms_idx]                                 # DOY for 50 %tile
+			lms <- t[lms_idx]                               # DOY for hcut+50/2
+
+		# Else get indices from PERCENTILES and use only
+		#  (dpc divisions per cycle) divisions, such that the
+		#  timing indices can only fall on one of those time
+		#  points.  For example if dpc=46, then any timing
+		#  output would only fall on one of those 46 time
+		#  points (spaced roughly 8 days apart) during the
+		#  year, as opposed to any of the 365 days.
+    } else if (timing == 'from_percentiles_dpc') {
       ems_idx <- wi[2]
       ms_idx <- wi[3]
       lms_idx <- wi[4]
       es2ms <- es_idx:(ms_idx-1)                      # ann_cum idx erly to mid
       ms2ls <- ms_idx:(ls_idx-1)                      # ann_cum idx mid to late
+    	ems <- t[ems_idx]                               # DOY for lcut+50/2
+	    ms <- t[ms_idx]                                 # DOY for 50 %tile
+			lms <- t[lms_idx]                               # DOY for hcut+50/2
     }
     es <- t[es_idx]                                   # DOY lcut, 15 %tile
-    ems <- t[ems_idx]                                 # DOY for lcut+50/2
-    ms <- t[ms_idx]                                   # DOY for 50 %tile
-    lms <- t[lms_idx]                                 # DOY for hcut+50/2
     ls <- t[ls_idx]                                   # DOY for hcut
     if (yr_type == 'cal_yr') {
       # Timing variables relative to the calendar year
